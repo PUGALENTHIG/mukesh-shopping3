@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.infinite-scroll-component__outerdiv {
+  width: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  * {
+    border-color: #2f3333;
+  }
+}

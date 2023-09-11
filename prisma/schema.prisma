@@ -6,18 +6,82 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+// App schema
+model Post {
+  id        String     @id @default(cuid())
+  content   String
+  mediaUrls String[]
+  createdAt DateTime  @default(now())
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  likes     Like[]
+  echoes     Echo[]
+  comments  Comment[]
+
+  @@unique([createdAt, id])
+  @@index([authorId])
+}
+model Echo {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  author    User      @relation("AuthoredEchoes", fields: [authorId], references: [id])
+  authorId  String
+  post      Post      @relation(fields: [postId], references: [id])
+  postId    String
+  echoer User     @relation("EchoedPosts", fields: [echoerId], references: [id])
+  echoerId String
+
+  @@index([authorId])
+  @@index([postId])
+  @@index([echoerId])
+
 }
 
-// Necessary for Next auth
+model Like {
+  post  Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+@@id([userId, postId])
+@@index([userId])
+@@index([postId])
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  content   String
+  createdAt DateTime  @default(now())
+  post      Post      @relation(fields: [postId], references: [id])
+  postId    String
+  author    User      @relation("comments", fields: [authorId], references: [id])
+  authorId  String
+  parent    Comment?  @relation("replies", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  parentId  String?
+  replies   Comment[] @relation("replies")
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([parentId])
+}
+
+model Search {
+  id            String    @id @default(cuid())
+  query         String
+  type          String // 'user' | 'post' | 'any'
+  user          User      @relation(fields: [userId], references: [id])
+  userId        String
+
+  @@index([userId])
+}
+
+
+// Next auth
 model Account {
     id                String  @id @default(cuid())
     userId            String
@@ -49,12 +113,25 @@ model Session {
 
 model User {
     id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
+    name          String
+    email         String    @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
+
+    bio           String?
+    username      String?    @unique
+    banner        String?
+    posts         Post[]
+    likes         Like[]
+    authoredEchoes Echo[]   @relation("AuthoredEchoes")
+    echoedPosts   Echo[]    @relation("EchoedPosts")
+    comments      Comment[] @relation("comments")    
+    following     User[]    @relation("Followers")
+    followers     User[]    @relation("Followers")
+    searches      Search[] 
+    
 }
 
 model VerificationToken {
@@ -64,3 +141,4 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+

@@ -8,8 +8,8 @@ import {
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 
-import { env } from "~/env.mjs";
-import { prisma } from "~/server/db";
+import { env } from "@/env.mjs";
+import { prisma } from "@/server/db";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -21,6 +21,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
+      username: string | null;
       // ...other properties
       // role: UserRole;
     };
@@ -39,13 +40,27 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: async ({ session, user }) => {
+      if (user) {
+        // Fetch the user's username from the database based on their ID
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { username: true, image: true, banner: true, bio: true },
+        });
+
+        // Include the username in the session if it exists in the database
+        if (dbUser?.username) {
+          session.user = {
+            ...session.user,
+            id: user.id,
+            username: dbUser.username,
+            image: dbUser.image,
+          };
+        }
+      }
+
+      return session;
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -55,7 +70,7 @@ export const authOptions: NextAuthOptions = {
     }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
   ],
 };
