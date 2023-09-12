@@ -16,6 +16,7 @@ type Post = {
   createdAt: Date;
   likeCount: number;
   likedByMe: boolean;
+  commentCount: number;
   author: {
     id: string;
     image: string | null;
@@ -30,6 +31,7 @@ type PostsListProps = {
   hasMore: boolean;
   fetchNewPosts: () => Promise<unknown>;
   posts?: Post[];
+  clickable: boolean;
 };
 
 const PostsList = ({
@@ -38,6 +40,7 @@ const PostsList = ({
   isLoading,
   fetchNewPosts,
   hasMore = false,
+  clickable,
 }: PostsListProps) => {
   if (isLoading) return <Spinner />;
   if (isError) return <h2>Error!</h2>;
@@ -56,91 +59,11 @@ const PostsList = ({
         loader={<Spinner />}
       >
         {posts.map((post) => {
-          return <Post key={post.id} {...post} />;
+          return <Post key={post.id} {...post} clickable={clickable} />;
         })}
       </InfiniteScroll>
     </>
   );
 };
-
-/* function Post({ id, author, content, createdAt, likeCount, likedByMe }: Post) {
-  const toggleLike = api.post.toggleLike.useMutation();
-
-  function handleToggleLike() {
-    toggleLike.mutate({ id });
-  }
-
-  return (
-    <div className="flex cursor-pointer flex-row border-b p-4">
-      <div className="h-full  pr-4">
-        <Link href={`/${author.name}`}>
-          <Avatar src={author.image ?? ""} />
-        </Link>
-      </div>
-      <div className="flex flex-grow flex-col">
-        <div className="flex flex-row gap-1">
-          <Link href={`/${author.name}`}>
-            <span className="font-bold outline-none hover:underline">
-              {author.name}
-            </span>
-          </Link>
-          <span>{author.username}</span>
-          <span>·</span>
-          <span>{JSON.stringify(createdAt)}</span>
-        </div>
-        <p className="whitespace-pre-wrap">{content}</p>
-        <div className="flex flex-row pt-3">
-          <LikeButton
-            onClick={handleToggleLike}
-            likedByMe={likedByMe}
-            likeCount={likeCount}
-          />
-        </div>
-      </div>
-    </div>
-  );
-} */
-
-/* type LikeButtonProps = {
-  onClick: () => void;
-  likedByMe: boolean;
-  likeCount: number;
-}; */
-
-/* function LikeButton({ onClick, likedByMe, likeCount }: LikeButtonProps) {
-  const session = useSession();
-  const LikeIcon = likedByMe ? HeartSolid : HeartOutline;
-
-  if (session.status !== "authenticated") {
-    return (
-      <div className="m-1 flex items-center gap-3 self-start text-gray-500">
-        <LikeIcon />
-        <span>{likeCount}</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-row gap-1">
-      <button
-        onClick={onClick}
-        className={`flex flex-row items-center transition-colors duration-75 ${
-          likedByMe
-            ? "text-red-500"
-            : "text-gray-500 hover:text-red-500 focus-visible:text-red-500"
-        }`}
-      >
-        <LikeIcon
-          className={`mr-2 w-5 transition-colors duration-75 ${
-            likedByMe
-              ? "fill-red-500"
-              : " group-hover:text-red-500 group-focus-visible:fill-red-500"
-          }`}
-        />
-        <span>{likeCount}</span>
-      </button>
-    </div>
-  );
-} */
 
 export default PostsList;

@@ -52,6 +52,7 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           isLoading={posts.isLoading}
           hasMore={posts.hasNextPage ?? false}
           fetchNewPosts={posts.fetchNextPage}
+          clickable={false}
         />
       </main>
     </>

@@ -52,6 +52,24 @@ export const postRouter = createTRPCRouter({
         whereClause: { author: { username } },
       });
     }),
+  singlePost: publicProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        limit: z.number().optional(),
+        cursor: z.object({ id: z.string(), createdAt: z.date() }).optional(),
+      }),
+    )
+    .query(async ({ input: { limit = 1, postId, cursor }, ctx }) => {
+      return await getPosts({
+        limit,
+        ctx,
+        cursor,
+        whereClause: {
+          id: postId,
+        },
+      });
+    }),
   create: protectedProcedure
     .input(z.object({ content: z.string(), mediaUrls: z.array(z.string()) }))
     .mutation(async ({ input: { content, mediaUrls }, ctx }) => {
@@ -80,6 +98,47 @@ export const postRouter = createTRPCRouter({
         return { addedLike: false };
       }
     }),
+  createComment: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        content: z.string(),
+        mediaUrls: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ input: { postId, content, mediaUrls }, ctx }) => {
+      const comment = await ctx.prisma.comment.create({
+        data: {
+          content,
+          postId,
+          mediaUrls,
+          authorId: ctx.session.user.id,
+        },
+      });
+
+      //notification?
+
+      return comment;
+    }),
+
+  getComments: publicProcedure
+    .input(z.object({ postId: z.string() }))
+    .query(async ({ input: { postId }, ctx }) => {
+      const comments = await ctx.prisma.comment.findMany({
+        where: { postId },
+        orderBy: { createdAt: "asc" },
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          author: {
+            select: { name: true, id: true, image: true, username: true },
+          },
+        },
+      });
+
+      return comments;
+    }),
 });
 
 async function getPosts({
@@ -104,13 +163,26 @@ async function getPosts({
       content: true,
       mediaUrls: true,
       createdAt: true,
-      _count: { select: { likes: true } },
+      _count: { select: { likes: true, comments: true, echoes: true } },
       likes:
         currentAuthorId == null
           ? false
           : { where: { userId: currentAuthorId } },
       author: {
         select: { name: true, id: true, image: true, username: true },
+      },
+      comments: {
+        select: {
+          id: true,
+          createdAt: true,
+          content: true,
+          mediaUrls: true,
+          postId: true,
+          authorId: true,
+          author: {
+            select: { name: true, id: true, image: true, username: true },
+          },
+        },
       },
     },
   });
@@ -129,8 +201,10 @@ async function getPosts({
         mediaUrls: post.mediaUrls,
         createdAt: post.createdAt,
         likeCount: post._count.likes,
+        commentCount: post._count.comments,
         author: post.author,
         likedByMe: post.likes?.length > 0,
+        comments: post.comments,
       };
     }),
     nextCursor,

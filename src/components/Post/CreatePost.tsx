@@ -1,13 +1,14 @@
 "use client";
-import { Avatar, Button, image } from "@nextui-org/react";
+import { Avatar, Button, Image } from "@nextui-org/react";
 import React, { type FormEvent } from "react";
 import { useSession } from "next-auth/react";
-import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon, FaceSmileIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { api } from "@/utils/api";
 
 const CreatePost = () => {
   const [draft, setDraft] = React.useState("");
-  const [mediaUrls, setMediaUrls] = React.useState([""]);
+  const [mediaUrls, setMediaUrls] = React.useState<string[]>([]);
+  const [fileInputKey, setFileInputKey] = React.useState(0);
 
   const session = useSession();
   const user = session.data?.user;
@@ -26,6 +27,7 @@ const CreatePost = () => {
         const newCachedPost = {
           ...newPost,
           likeCount: 0,
+          commentCount: 0,
           likedByMe: false,
           author: {
             id: session.data.user.id,
@@ -33,6 +35,7 @@ const CreatePost = () => {
             image: session.data.user.image ?? null,
             username: session.data.user.username ?? null,
           },
+          comments: [],
         };
 
         const [firstPage, ...restPages] = oldData.pages;
@@ -50,13 +53,14 @@ const CreatePost = () => {
       });
     },
   });
-
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
   const draftRef = React.useRef<HTMLTextAreaElement>(null);
+
   const AutoSizeDraft = (
     draftRef: HTMLTextAreaElement | null,
     draft: string,
   ) => {
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
       if (draftRef) {
         draftRef.style.height = "0px";
         const scrollHeight = draftRef.scrollHeight;
@@ -68,6 +72,24 @@ const CreatePost = () => {
 
   AutoSizeDraft(draftRef.current, draft);
 
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const selectedImages = Array.from(files).map((file) =>
+      URL.createObjectURL(file),
+    );
+    setMediaUrls([...mediaUrls, ...selectedImages]);
+    e.target.value = ""; // Clear the file input
+  };
+
+  const removeImage = (indexToRemove: number) => {
+    const updatedMediaUrls = mediaUrls.filter(
+      (_, index) => index !== indexToRemove,
+    );
+    setMediaUrls(updatedMediaUrls);
+  };
+
   function handlePost(e: FormEvent) {
     e.preventDefault();
 
@@ -75,7 +97,7 @@ const CreatePost = () => {
   }
 
   return (
-    <div className="flex w-full flex-row border-b-1 p-4">
+    <div className="flex w-full flex-row border-b-1 px-6 py-4">
       <div className="h-full pr-4">
         <Avatar radius="full" size="md" src={user?.image ?? ""} />
       </div>
@@ -88,16 +110,47 @@ const CreatePost = () => {
               setDraft(e.target.value);
             }}
             placeholder="What's on your mind?"
-            className="w-full resize-none bg-inherit px-2 py-2"
+            className="my-2 w-full resize-none bg-inherit px-2 py-2"
             ref={draftRef}
             rows={1}
             maxLength={280}
           />
-          <div className="flex flex-row justify-between border-y-1 border-b-0 pt-2">
-            <div className="flex flex-row">
-              <div className="cursor-pointer rounded-full px-2">
-                <PhotoIcon width={20} />
+          <div>
+            {mediaUrls.map((imageUrl, index) => (
+              <div key={index} className="relative inline-block">
+                <Image
+                  src={imageUrl}
+                  alt={`Image ${index}`}
+                  className="m-2 h-52 object-cover"
+                />
+                <button
+                  aria-label="close"
+                  type="button"
+                  className="absolute right-0 top-0 z-40 rounded-full p-1 text-white"
+                  onClick={() => removeImage(index)}
+                >
+                  <XMarkIcon width={24} />
+                </button>
               </div>
+            ))}
+          </div>
+          <div className="flex flex-row justify-between border-y-1 border-b-0 pt-4">
+            <div className="flex flex-row">
+              <label
+                className="cursor-pointer rounded-full px-2"
+                htmlFor="fileInput"
+              >
+                <PhotoIcon width={20} />
+                <input
+                  aria-label="add image"
+                  id="fileInput"
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleFileInputChange}
+                />
+              </label>
               <div className="cursor-pointer rounded-full px-2">
                 <FaceSmileIcon width={20} />
               </div>

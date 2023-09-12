@@ -1,20 +1,17 @@
 import React from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Head from "next/head";
-import Link from "next/link";
+
 import * as Tabs from "@radix-ui/react-tabs";
 
 import { api } from "@/utils/api";
-import CreatePost from "@/components/CreatePost/CreatePost";
+import CreatePost from "@/components/Post/CreatePost";
 import PostsList from "@/components/PostsList/PostsList";
 
 export default function Home() {
-  /* const hello = api.example.hello.useQuery({ text: "from tRPC" }); */
   const [tab, setTab] = React.useState("recent");
   return (
     <>
-      <main className="flex flex-col items-center justify-center">
-        <header className="flex w-full flex-col border-y">
+      <main className="flex w-full flex-col items-center justify-center">
+        <nav className="sticky top-0 z-50 flex w-full flex-col border-y backdrop-blur-xl">
           <h1 className=" px-4 py-4 text-2xl font-bold">Home</h1>
           <div className="flex justify-center">
             <Tabs.Root
@@ -38,7 +35,7 @@ export default function Home() {
               </Tabs.List>
             </Tabs.Root>
           </div>
-        </header>
+        </nav>
         <CreatePost />
 
         {tab === "recent" ? <RecentPosts /> : <FollowingPosts />}
@@ -60,6 +57,7 @@ function RecentPosts() {
       isError={feed.isError}
       hasMore={feed.hasNextPage ?? false}
       fetchNewPosts={feed.fetchNextPage}
+      clickable={true}
     />
   );
 }
@@ -77,6 +75,7 @@ function FollowingPosts() {
       isError={feed.isError}
       hasMore={feed.hasNextPage ?? false}
       fetchNewPosts={feed.fetchNextPage}
+      clickable={true}
     />
   );
 }

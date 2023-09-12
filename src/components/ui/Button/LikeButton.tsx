@@ -1,8 +1,6 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 
-import { Button } from "@nextui-org/react";
-
 import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
 
@@ -26,23 +24,27 @@ function LikeButton({ onClick, likedByMe, likeCount }: LikeButtonProps) {
   }
 
   return (
-    <div className="flex flex-row gap-1">
+    <div className="flex flex-row">
       <button
+        type="button"
         onClick={onClick}
         className={`flex flex-row items-center transition-all duration-75 ${
           likedByMe
-            ? "text-red-500"
-            : "text-gray-500 hover:text-red-500 focus-visible:text-red-500"
+            ? `text-red-500`
+            : `text-gray-500 hover:text-red-500 focus-visible:text-red-500`
         }`}
       >
-        <LikeIcon
-          className={`w-5 transition-colors duration-75 ${
-            likedByMe
-              ? "fill-red-500"
-              : " group-hover:text-red-500 group-focus-visible:fill-red-500"
-          }`}
-        />
-
+        <div
+          className={`group-hover-bg-red-500 rounded-full p-2 outline-red-500 transition-colors duration-100 hover:bg-red-500 hover:bg-opacity-20 focus-visible:bg-red-500 group-focus-visible:bg-red-500`}
+        >
+          <LikeIcon
+            className={`w-5 transition-colors duration-75 ${
+              likedByMe
+                ? `fill-red-500`
+                : ` group-hover:text-red-500 group-focus-visible:fill-red-500`
+            }`}
+          />
+        </div>
         <span className="ml-2">{likeCount}</span>
       </button>
     </div>
