@@ -33,9 +33,9 @@ const Login: NextPage = ({
     formState: { errors },
   } = useForm<ILogin>();
 
-  /*  const onSubmit: SubmitHandler<ILogin> = async (data) => {
+  const onSubmit: SubmitHandler<ILogin> = async (data) => {
     await signIn("credentials", { ...data, callbackUrl: "/" });
-  }; */
+  };
 
   return (
     <section className="flex h-full w-full justify-center">
@@ -43,12 +43,7 @@ const Login: NextPage = ({
         <div className="container mx-auto flex items-center justify-center pt-4">
           <Image alt="branding" src={LogoWhite} width={40} height={40} />
         </div>
-        <form
-          method="post"
-          action="/api/auth/callback/credentials"
-          /* onSubmit={handleSubmit(onSubmit)} */
-          className="mt-6"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
           <div>
             <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           </div>

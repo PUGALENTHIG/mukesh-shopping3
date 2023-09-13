@@ -72,11 +72,11 @@ export const authOptions: NextAuthOptions = {
     },
   },
   secret: env.NEXTAUTH_SECRET,
-  pages: {
+  /* pages: {
     signIn: "/login",
     newUser: "/register",
     error: "/login",
-  },
+  }, */
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
