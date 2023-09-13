@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { Button } from "@nextui-org/react";
+import { useTheme } from "next-themes";
 import {
   HomeIcon,
   UserIcon,
@@ -12,11 +13,14 @@ import {
   EnvelopeIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid";
+import Logo from "/public/echo.png";
+import LogoWhite from "/public/echo-white.png";
 import UserCard from "./UserCard";
 
-const Sidebar = () => {
+const LeftSidebar = () => {
   const session = useSession();
   const user = session.data?.user;
+  const { theme } = useTheme();
 
   const SidebarButtons = [
     { text: "Home", icon: <HomeIcon />, link: "/" },
@@ -25,7 +29,7 @@ const Sidebar = () => {
     {
       text: "Profile",
       icon: <UserIcon />,
-      link: `/${user?.username ?? "login"}`,
+      link: `/${user?.username ?? "auth/login"}`,
     },
   ];
 
@@ -39,12 +43,12 @@ const Sidebar = () => {
         justify-center p-0 xl:ml-4"
       >
         <Link href="/">
-          <Image alt="branding" src="/echo.png" width={30} height={30} />
+          <Image alt="branding" src={LogoWhite} width={30} height={30} />
         </Link>
       </div>
       <div className="my-8 flex flex-col space-y-6 xl:ml-4">
         {SidebarButtons.map((SidebarButton, i) => (
-          <Link key={i} href={SidebarButton.link}>
+          <Link replace key={i} href={SidebarButton.link}>
             <Button
               variant="light"
               className="flex justify-start"
@@ -84,4 +88,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default LeftSidebar;

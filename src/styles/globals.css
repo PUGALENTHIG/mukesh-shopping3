@@ -4,6 +4,7 @@
 
 * {
   border-color: #2f3333;
+  font-size: 18px;
 }
 
 @media (prefers-color-scheme: light) {
@@ -14,6 +15,10 @@
 
 .infinite-scroll-component__outerdiv {
   width: 100%;
+}
+
+.bg-elevation-1 {
+  background-color: #1e1e1e;
 }
 
 /* .link {

@@ -5,18 +5,16 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
+import { loginSchema } from "@/validation/auth";
+
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 
+import argon2 from "argon2";
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
- */
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
@@ -40,7 +38,15 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: async ({ session, user }) => {
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+      }
+
+      return token;
+    },
+    session: async ({ session, token, user }) => {
       if (user) {
         // Fetch the user's username from the database based on their ID
         const dbUser = await prisma.user.findUnique({
@@ -57,10 +63,19 @@ export const authOptions: NextAuthOptions = {
             image: dbUser.image,
           };
         }
+        if (token && session.user) {
+          session.user.id = token.id as string;
+        }
       }
 
       return session;
     },
+  },
+  secret: env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login",
+    newUser: "/register",
+    error: "/login",
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -71,6 +86,40 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: {},
+        password: {},
+      },
+      authorize: async (credentials) => {
+        const cred = await loginSchema.parseAsync(credentials);
+        const user = await prisma.user.findFirst({
+          where: {
+            email: cred.email,
+          },
+        });
+
+        if (!user) {
+          return null;
+        }
+
+        const passwordIsValid = await argon2.verify(
+          user.password!,
+          cred.password,
+        );
+
+        if (!passwordIsValid) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+        };
+      },
     }),
   ],
 };

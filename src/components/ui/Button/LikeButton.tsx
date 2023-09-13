@@ -17,7 +17,7 @@ function LikeButton({ onClick, likedByMe, likeCount }: LikeButtonProps) {
   if (session.status !== "authenticated") {
     return (
       <div className="m-1 flex items-center gap-3 self-start text-gray-500">
-        <LikeIcon />
+        <LikeIcon className="w-5" />
         <span>{likeCount}</span>
       </div>
     );

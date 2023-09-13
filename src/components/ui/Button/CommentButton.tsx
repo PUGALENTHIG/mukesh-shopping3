@@ -14,7 +14,7 @@ function CommentButton({ onClick, commentCount }: CommentButtonProps) {
   if (session.status !== "authenticated") {
     return (
       <div className="m-1 flex items-center gap-3 self-start text-gray-500">
-        <ChatBubbleLeftIcon />
+        <ChatBubbleLeftIcon className="w-5" />
         <span>{commentCount}</span>
       </div>
     );

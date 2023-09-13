@@ -10,8 +10,8 @@ type CreateCommentProps = {
 };
 
 const CreateComment = ({ postId }: CreateCommentProps) => {
-  const [reply, setReply] = React.useState("");
-  const [mediaUrls, setMediaUrls] = React.useState([""]);
+  const [reply, setReply] = React.useState<string>("");
+  const [mediaUrls] = React.useState([""]);
 
   const session = useSession();
   const user = session.data?.user;

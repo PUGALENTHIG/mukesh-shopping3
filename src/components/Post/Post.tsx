@@ -13,6 +13,7 @@ import { timeAgo } from "@/utils/dateFormat";
 import { useRouter } from "next/router";
 import CommentButton from "@/components/ui/Button/CommentButton";
 import CreateComment from "./CreateComment";
+import PostMedia from "./PostMedia";
 type PostProps = {
   id: string;
   author: {
@@ -47,6 +48,7 @@ function Post({
   id,
   author,
   content,
+  mediaUrls,
   createdAt,
   likeCount,
   likedByMe,
@@ -137,9 +139,34 @@ function Post({
               <span className="px-1 text-gray-400">{timeAgo(createdAt)}</span>
             </div>
             <p className="whitespace-pre-wrap py-2">{content}</p>
+            {mediaUrls && (
+              <div
+                className={`grid grid-cols-${
+                  mediaUrls && mediaUrls?.length % 2 === 0
+                    ? 2
+                    : mediaUrls?.length === 1
+                    ? 1
+                    : 2
+                } grid-rows-${
+                  mediaUrls && mediaUrls?.length < 3 ? 1 : 2
+                } place-content-center gap-2`}
+              >
+                {mediaUrls?.map((imageUrl, index) => (
+                  <PostMedia
+                    key={index}
+                    index={index}
+                    imageUrl={imageUrl}
+                    mediaUrls={mediaUrls}
+                    showClose={false}
+                    removeImage={undefined}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
-        <div className="ml-14 flex flex-row  justify-start gap-10 pt-3">
+
+        <div className="ml-14 flex flex-row  justify-start gap-16 pt-3">
           <LikeButton
             onClick={handleToggleLike}
             likedByMe={likedByMe}

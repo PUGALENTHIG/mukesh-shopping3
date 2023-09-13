@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
-import { Avatar, Button, Image } from "@nextui-org/react";
+import { Avatar, Button } from "@nextui-org/react";
 import React, { type FormEvent } from "react";
 import { useSession } from "next-auth/react";
-import { PhotoIcon, FaceSmileIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/solid";
 import { api } from "@/utils/api";
+import PostMedia from "./PostMedia";
 
 const CreatePost = () => {
-  const [draft, setDraft] = React.useState("");
+  const [draft, setDraft] = React.useState<string>("");
   const [mediaUrls, setMediaUrls] = React.useState<string[]>([]);
-  const [fileInputKey, setFileInputKey] = React.useState(0);
 
   const session = useSession();
   const user = session.data?.user;
@@ -72,15 +73,36 @@ const CreatePost = () => {
 
   AutoSizeDraft(draftRef.current, draft);
 
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) return Promise.resolve();
 
     const selectedImages = Array.from(files).map((file) =>
-      URL.createObjectURL(file),
+      encodeImageToBase64(file),
     );
-    setMediaUrls([...mediaUrls, ...selectedImages]);
-    e.target.value = ""; // Clear the file input
+
+    e.target.value = "";
+
+    return Promise.all(selectedImages).then((encodedImages) => {
+      setMediaUrls([...mediaUrls, ...encodedImages]);
+    });
+  };
+
+  const encodeImageToBase64 = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (typeof e.target?.result === "string") {
+          resolve(e.target.result);
+        } else {
+          reject(new Error("Failed to read image as base64."));
+        }
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   const removeImage = (indexToRemove: number) => {
@@ -94,6 +116,7 @@ const CreatePost = () => {
     e.preventDefault();
 
     createPost.mutate({ content: draft, mediaUrls: mediaUrls });
+    setMediaUrls([]);
   }
 
   return (
@@ -115,49 +138,52 @@ const CreatePost = () => {
             rows={1}
             maxLength={280}
           />
-          <div>
+          <div
+            className={`grid grid-cols-${
+              mediaUrls.length % 2 === 0 ? 2 : mediaUrls.length === 1 ? 1 : 2
+            } grid-rows-${
+              mediaUrls.length < 3 ? 1 : 2
+            } place-content-center gap-2`}
+          >
             {mediaUrls.map((imageUrl, index) => (
-              <div key={index} className="relative inline-block">
-                <Image
-                  src={imageUrl}
-                  alt={`Image ${index}`}
-                  className="m-2 h-52 object-cover"
-                />
-                <button
-                  aria-label="close"
-                  type="button"
-                  className="absolute right-0 top-0 z-40 rounded-full p-1 text-white"
-                  onClick={() => removeImage(index)}
-                >
-                  <XMarkIcon width={24} />
-                </button>
-              </div>
+              <PostMedia
+                key={index}
+                index={index}
+                imageUrl={imageUrl}
+                mediaUrls={mediaUrls}
+                removeImage={removeImage}
+                showClose={true}
+              />
             ))}
           </div>
-          <div className="flex flex-row justify-between border-y-1 border-b-0 pt-4">
-            <div className="flex flex-row">
-              <label
-                className="cursor-pointer rounded-full px-2"
-                htmlFor="fileInput"
-              >
-                <PhotoIcon width={20} />
-                <input
-                  aria-label="add image"
-                  id="fileInput"
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                  onChange={handleFileInputChange}
-                />
-              </label>
-              <div className="cursor-pointer rounded-full px-2">
-                <FaceSmileIcon width={20} />
+          <div className="mt-4 flex flex-row justify-between border-y-1 border-b-0">
+            <div className="mt-2 flex w-full flex-row justify-between">
+              <div className="flex flex-row">
+                <label
+                  className="cursor-pointer rounded-full px-2"
+                  htmlFor="fileInput"
+                >
+                  <PhotoIcon width={24} />
+                  <input
+                    aria-label="add image"
+                    id="fileInput"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={(e) => handleMediaInput(e)}
+                    disabled={mediaUrls.length === 4 ? true : false}
+                  />
+                </label>
+                <div className="cursor-pointer rounded-full px-2">
+                  <FaceSmileIcon width={24} />
+                </div>
               </div>
+              <Button type="submit" className="w-8">
+                Post
+              </Button>
             </div>
-            <Button type="submit" className="w-8">
-              Post
-            </Button>
           </div>
         </form>
       </div>

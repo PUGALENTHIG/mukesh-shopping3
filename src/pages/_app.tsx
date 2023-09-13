@@ -2,18 +2,21 @@ import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider } from "next-themes";
 
-import Sidebar from "@/components/Sidebar/Sidebar";
+import AppLayout from "@/components/Layouts/AppLayout";
+import AuthLayout from "@/components/Layouts/AuthLayout";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const router = useRouter();
   return (
     <SessionProvider session={session}>
       <Head>
@@ -25,12 +28,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
       </Head>
       <NextUIProvider>
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <div className="container mx-auto flex items-start">
-            <Sidebar />
-            <div className="min-h-screen flex-grow border-x">
+          {router.pathname.includes("/auth") ? (
+            <AuthLayout>
               <Component {...pageProps} />
-            </div>
-          </div>
+            </AuthLayout>
+          ) : (
+            <AppLayout>
+              <Component {...pageProps} />
+            </AppLayout>
+          )}
         </ThemeProvider>
       </NextUIProvider>
     </SessionProvider>

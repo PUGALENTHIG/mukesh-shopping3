@@ -18,7 +18,12 @@ type CommentProps = {
   };
 };
 
-const Comment = ({ createdAt, content, mediaUrls, author }: CommentProps) => {
+const Comment = ({
+  /* mediaUrls,  */
+  createdAt,
+  author,
+  content,
+}: CommentProps) => {
   return (
     <div className="border-b p-4">
       <div className={`flex cursor-default`}>
