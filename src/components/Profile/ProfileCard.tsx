@@ -45,7 +45,7 @@ const ProfileCard = ({
   });
 
   return (
-    <div>
+    <div className="border-b">
       <div className="banner h-64 w-full">
         {banner ? (
           <Image
@@ -74,7 +74,7 @@ const ProfileCard = ({
           }
         />
       </div>
-      <div className="mx-6 mt-4">
+      <div className="mx-6 my-4">
         <div className="pfp text-xl font-bold">{name}</div>
         <div className="username ">@{username}</div>
         <div className="bio mt-3">{bio}</div>

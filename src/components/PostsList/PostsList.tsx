@@ -42,7 +42,12 @@ const PostsList = ({
   hasMore = false,
   clickable,
 }: PostsListProps) => {
-  if (isLoading) return <Spinner />;
+  if (isLoading)
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
   if (isError) return <h2>Error!</h2>;
   if (posts == null) return null;
 
