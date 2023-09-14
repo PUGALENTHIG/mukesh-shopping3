@@ -1,10 +1,11 @@
 import React from "react";
-import { api } from "@/utils/api";
 import LikeButton from "@/components/ui/Button/LikeButton";
 import CommentButton from "@/components/ui/Button/CommentButton";
 import { Avatar } from "@nextui-org/react";
 import Link from "next/link";
 import { timeAgo } from "@/utils/dateFormat";
+import MasonryGrid from "../MasonryGrid/MasonryGrid";
+import EchoButton from "../ui/Button/EchoButton";
 
 type CommentProps = {
   createdAt: Date;
@@ -23,6 +24,7 @@ const Comment = ({
   createdAt,
   author,
   content,
+  mediaUrls,
 }: CommentProps) => {
   return (
     <div className="border-b p-4">
@@ -44,11 +46,17 @@ const Comment = ({
             <span className="px-1 text-gray-400">{timeAgo(createdAt)}</span>
           </div>
           <p className="whitespace-pre-wrap py-2">{content}</p>
+          <MasonryGrid
+            mediaUrls={mediaUrls ?? []}
+            setMediaUrls={() => undefined}
+            showClose={false}
+          />
         </div>
       </div>
-      <div className="ml-14 flex flex-row  justify-start gap-10 pt-3">
+      <div className="ml-14 flex flex-row  justify-start gap-20 px-2 pt-3">
         <LikeButton onClick={() => null} likedByMe={false} likeCount={0} />
         <CommentButton onClick={() => null} commentCount={0} />
+        <EchoButton onClick={() => null} EchoCount={0} />
       </div>
     </div>
   );

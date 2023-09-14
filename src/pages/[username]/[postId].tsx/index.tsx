@@ -13,6 +13,7 @@ import { Button } from "@nextui-org/react";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import PostsList from "@/components/PostsList/PostsList";
 import Comment from "@/components/Comment/Comment";
+import CreateComment from "@/components/Post/CreateComment";
 
 const SinglePost = () => {
   const router = useRouter();
@@ -43,6 +44,7 @@ const SinglePost = () => {
           fetchNewPosts={posts.fetchNextPage}
           clickable={false}
         />
+        <CreateComment postId={postId} />
       </div>
       {console.log(router.query)}
       <div>

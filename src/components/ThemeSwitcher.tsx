@@ -1,11 +1,20 @@
 "use client";
-
+import React from "react";
 import { useTheme } from "next-themes";
 import { Button } from "@nextui-org/react";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 
 export const ThemeSwitcher = () => {
+  const [mounted, setMounted] = React.useState(false);
   const { theme, setTheme } = useTheme();
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div>

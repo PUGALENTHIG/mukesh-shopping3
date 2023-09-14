@@ -12,7 +12,7 @@ import Post from "@/components/Post/Post";
 type Post = {
   id: string;
   content: string;
-  mediaUrls?: string[];
+  mediaUrls?: string[] | undefined;
   createdAt: Date;
   likeCount: number;
   likedByMe: boolean;

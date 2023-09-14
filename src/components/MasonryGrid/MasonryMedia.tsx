@@ -2,7 +2,7 @@ import React from "react";
 import { Image } from "@nextui-org/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
-type PostMedia = {
+type MasonryMedia = {
   index: number;
   mediaUrls?: string[];
   imageUrl: string;
@@ -10,13 +10,13 @@ type PostMedia = {
   showClose: boolean;
 };
 
-const PostMedia = ({
+const MasonryMedia = ({
   mediaUrls,
   imageUrl,
   index,
   removeImage,
   showClose = false,
-}: PostMedia) => {
+}: MasonryMedia) => {
   return (
     <div
       style={
@@ -24,7 +24,7 @@ const PostMedia = ({
           ? { gridArea: "1 / 1 / 3 / 2" }
           : { gridArea: "auto" }
       }
-      className={mediaUrls?.length === 1 ? `h-fit max-w-[800px]` : `w-fit`}
+      className={mediaUrls?.length === 1 ? `h-fit max-w-[750px]` : `w-fit`}
       key={index}
     >
       {showClose && (
@@ -43,11 +43,11 @@ const PostMedia = ({
         removeWrapper
         src={imageUrl}
         alt={`Image ${index}`}
-        className="m-2 h-full w-full object-cover"
+        className="my-2 h-full w-full object-cover"
         shadow="none"
       />
     </div>
   );
 };
 
-export default PostMedia;
+export default MasonryMedia;

@@ -1,40 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React from "react";
+import React, { FormEvent } from "react";
 import type {
   GetServerSideProps,
   NextPage,
   InferGetServerSidePropsType,
   GetServerSidePropsContext,
 } from "next";
-import type { ILogin } from "@/validation/auth";
 
 import { getServerAuthSession } from "@/server/common/get-server-auth-session";
-import { getCsrfToken } from "next-auth/react";
 
-import { useForm, type SubmitHandler } from "react-hook-form";
+("react-hook-form");
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
-
 import Image from "next/image";
 import { Button, Input } from "@nextui-org/react";
 
 import LogoWhite from "/public/echo-white.png";
 
-const Login: NextPage = ({
-  csrfToken,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const router = useRouter();
-  const { error } = router.query;
+const Login: NextPage = ({}: InferGetServerSidePropsType<
+  typeof getServerSideProps
+>) => {
+  const [authState, setAuthState] = React.useState({ email: "", password: "" });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ILogin>();
-
-  const onSubmit: SubmitHandler<ILogin> = async (data) => {
-    await signIn("credentials", { ...data, callbackUrl: "/" });
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    await signIn("credentials", {
+      email: authState.email,
+      password: authState.password,
+      callbackUrl: "http://localhost:3000/",
+    });
   };
 
   return (
@@ -43,17 +37,18 @@ const Login: NextPage = ({
         <div className="container mx-auto flex items-center justify-center pt-4">
           <Image alt="branding" src={LogoWhite} width={40} height={40} />
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
-          <div>
-            <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-          </div>
+        <form onSubmit={handleSubmit} className="mt-6">
           <div>
             <Input
               label="Email"
               title="Email"
               id="email"
               type="email"
-              {...register("email", { required: true })}
+              value={authState.email}
+              onChange={(e) =>
+                setAuthState({ ...authState, email: e.target.value })
+              }
+              required
             />
           </div>
 
@@ -62,7 +57,11 @@ const Login: NextPage = ({
               label="Password"
               title="Password"
               type="password"
-              {...register("password", { required: true })}
+              value={authState.password}
+              onChange={(e) =>
+                setAuthState({ ...authState, password: e.target.value })
+              }
+              required
             />
             <div className="flex justify-end px-2 pt-2">
               <a href="#" className="text-xs">
@@ -146,9 +145,6 @@ export const getServerSideProps: GetServerSideProps = async (
       redirect: {
         destination: "/",
         permanent: false,
-      },
-      props: {
-        csrfToken: await getCsrfToken(context),
       },
     };
   }

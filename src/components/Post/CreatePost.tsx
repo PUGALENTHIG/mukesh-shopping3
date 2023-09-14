@@ -5,7 +5,8 @@ import React, { type FormEvent } from "react";
 import { useSession } from "next-auth/react";
 import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/solid";
 import { api } from "@/utils/api";
-import PostMedia from "./PostMedia";
+import PostMedia from "../MasonryGrid/MasonryMedia";
+import MasonryGrid from "../MasonryGrid/MasonryGrid";
 
 const CreatePost = () => {
   const [draft, setDraft] = React.useState<string>("");
@@ -73,7 +74,7 @@ const CreatePost = () => {
 
   AutoSizeDraft(draftRef.current, draft);
 
-  const handleMediaInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return Promise.resolve();
 
@@ -83,9 +84,8 @@ const CreatePost = () => {
 
     e.target.value = "";
 
-    return Promise.all(selectedImages).then((encodedImages) => {
-      setMediaUrls([...mediaUrls, ...encodedImages]);
-    });
+    const encodedImages = await Promise.all(selectedImages);
+    setMediaUrls([...mediaUrls, ...encodedImages]);
   };
 
   const encodeImageToBase64 = (file: File) => {
@@ -105,13 +105,6 @@ const CreatePost = () => {
     });
   };
 
-  const removeImage = (indexToRemove: number) => {
-    const updatedMediaUrls = mediaUrls.filter(
-      (_, index) => index !== indexToRemove,
-    );
-    setMediaUrls(updatedMediaUrls);
-  };
-
   function handlePost(e: FormEvent) {
     e.preventDefault();
 
@@ -126,36 +119,27 @@ const CreatePost = () => {
       </div>
       <div className="flex w-full flex-col text-xl">
         <form onSubmit={handlePost}>
-          <textarea
-            id="draft-input"
-            value={draft}
-            onChange={(e) => {
-              setDraft(e.target.value);
-            }}
-            placeholder="What's on your mind?"
-            className="my-2 w-full resize-none bg-inherit px-2 py-2"
-            ref={draftRef}
-            rows={1}
-            maxLength={280}
-          />
-          <div
-            className={`grid grid-cols-${
-              mediaUrls.length % 2 === 0 ? 2 : mediaUrls.length === 1 ? 1 : 2
-            } grid-rows-${
-              mediaUrls.length < 3 ? 1 : 2
-            } place-content-center gap-2`}
-          >
-            {mediaUrls.map((imageUrl, index) => (
-              <PostMedia
-                key={index}
-                index={index}
-                imageUrl={imageUrl}
-                mediaUrls={mediaUrls}
-                removeImage={removeImage}
-                showClose={true}
-              />
-            ))}
+          <div className="flex flex-row">
+            <textarea
+              id="draft-input"
+              value={draft}
+              onChange={(e) => {
+                setDraft(e.target.value);
+              }}
+              placeholder="What's on your mind?"
+              className="my-2 w-full resize-none bg-inherit px-2 py-2"
+              ref={draftRef}
+              rows={1}
+              maxLength={280}
+            />
           </div>
+
+          <MasonryGrid
+            mediaUrls={mediaUrls ?? []}
+            setMediaUrls={setMediaUrls}
+            showClose={true}
+          />
+
           <div className="mt-4 flex flex-row justify-between border-y-1 border-b-0">
             <div className="mt-2 flex w-full flex-row justify-between">
               <div className="flex flex-row">

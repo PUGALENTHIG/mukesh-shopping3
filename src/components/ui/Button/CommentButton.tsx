@@ -25,10 +25,10 @@ function CommentButton({ onClick, commentCount }: CommentButtonProps) {
       <button
         type="button"
         onClick={onClick}
-        className={`flex flex-row items-center text-gray-500 transition-all duration-75 hover:text-blue-500 focus-visible:text-blue-500`}
+        className={`group flex flex-row items-center text-gray-500 transition-all duration-75 hover:text-blue-500 focus-visible:text-blue-500`}
       >
         <div
-          className={`group-hover-bg-blue-500 rounded-full p-2 outline-blue-500 transition-colors duration-100 hover:bg-blue-500 hover:bg-opacity-20 focus-visible:bg-blue-500 group-focus-visible:bg-blue-500`}
+          className={`group-hover-bg-blue-500 rounded-full p-2 outline-blue-500 transition-colors duration-100 focus-visible:bg-blue-500 group-hover:bg-blue-500 group-hover:bg-opacity-20 group-focus-visible:bg-blue-500`}
         >
           <ChatBubbleLeftIcon
             className={`w-5 transition-colors duration-75 group-hover:text-blue-500 group-focus-visible:fill-blue-500`}

@@ -38,15 +38,7 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    jwt: ({ token, user }) => {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
-      }
-
-      return token;
-    },
-    session: async ({ session, token, user }) => {
+    session: async ({ session, user }) => {
       if (user) {
         // Fetch the user's username from the database based on their ID
         const dbUser = await prisma.user.findUnique({
@@ -63,16 +55,13 @@ export const authOptions: NextAuthOptions = {
             image: dbUser.image,
           };
         }
-        if (token && session.user) {
-          session.user.id = token.id as string;
-        }
       }
 
       return session;
     },
   },
   secret: env.NEXTAUTH_SECRET,
-  /* pages: {
+  /*  pages: {
     signIn: "/login",
     newUser: "/register",
     error: "/login",
@@ -87,7 +76,7 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
-    CredentialsProvider({
+    /* CredentialsProvider({
       name: "credentials",
       credentials: {
         email: {},
@@ -120,7 +109,7 @@ export const authOptions: NextAuthOptions = {
           username: user.username,
         };
       },
-    }),
+    }), */
   ],
 };
 

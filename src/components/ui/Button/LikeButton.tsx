@@ -28,14 +28,14 @@ function LikeButton({ onClick, likedByMe, likeCount }: LikeButtonProps) {
       <button
         type="button"
         onClick={onClick}
-        className={`flex flex-row items-center transition-all duration-75 ${
+        className={`group flex flex-row items-center transition-all duration-75 ${
           likedByMe
             ? `text-red-500`
             : `text-gray-500 hover:text-red-500 focus-visible:text-red-500`
         }`}
       >
         <div
-          className={`group-hover-bg-red-500 rounded-full p-2 outline-red-500 transition-colors duration-100 hover:bg-red-500 hover:bg-opacity-20 focus-visible:bg-red-500 group-focus-visible:bg-red-500`}
+          className={`group-hover-bg-red-500 rounded-full p-2 outline-red-500 transition-colors duration-100 focus-visible:bg-red-500 group-hover:bg-red-500 group-hover:bg-opacity-20 group-focus-visible:bg-red-500`}
         >
           <LikeIcon
             className={`w-5 transition-colors duration-75 ${

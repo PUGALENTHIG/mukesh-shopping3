@@ -2,6 +2,7 @@
 import { Avatar, Button, image } from "@nextui-org/react";
 import React, { type FormEvent } from "react";
 import { useSession } from "next-auth/react";
+import MasonryGrid from "../MasonryGrid/MasonryGrid";
 import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/solid";
 import { api } from "@/utils/api";
 
@@ -11,7 +12,7 @@ type CreateCommentProps = {
 
 const CreateComment = ({ postId }: CreateCommentProps) => {
   const [reply, setReply] = React.useState<string>("");
-  const [mediaUrls] = React.useState([""]);
+  const [mediaUrls, setMediaUrls] = React.useState<string[]>([]);
 
   const session = useSession();
   const user = session.data?.user;
@@ -102,6 +103,11 @@ const CreateComment = ({ postId }: CreateCommentProps) => {
             ref={replyRef}
             rows={1}
             maxLength={280}
+          />
+          <MasonryGrid
+            mediaUrls={mediaUrls ?? []}
+            setMediaUrls={setMediaUrls}
+            showClose={true}
           />
           <div className="flex flex-row justify-between border-y-1 border-b-0 pt-2">
             <div className="flex flex-row">

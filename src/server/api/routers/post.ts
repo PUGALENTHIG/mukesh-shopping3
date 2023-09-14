@@ -120,7 +120,17 @@ export const postRouter = createTRPCRouter({
 
       return comment;
     }),
-
+  searchPosts: publicProcedure
+    .input(
+      z.object({
+        searchTerm: z.string(),
+        limit: z.number().optional(),
+        cursor: z.object({ id: z.string(), createdAt: z.date() }).optional(),
+      }),
+    )
+    .query(async ({ input: { searchTerm, cursor, limit = 10 }, ctx }) => {
+      return await getSearchedPost({ searchTerm, cursor, limit, ctx });
+    }),
   getComments: publicProcedure
     .input(z.object({ postId: z.string() }))
     .query(async ({ input: { postId }, ctx }) => {
@@ -158,6 +168,80 @@ async function getPosts({
     cursor: cursor ? { createdAt_id: cursor } : undefined,
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     where: whereClause,
+    select: {
+      id: true,
+      content: true,
+      mediaUrls: true,
+      createdAt: true,
+      _count: { select: { likes: true, comments: true, echoes: true } },
+      likes:
+        currentAuthorId == null
+          ? false
+          : { where: { userId: currentAuthorId } },
+      author: {
+        select: { name: true, id: true, image: true, username: true },
+      },
+      comments: {
+        select: {
+          id: true,
+          createdAt: true,
+          content: true,
+          mediaUrls: true,
+          postId: true,
+          authorId: true,
+          author: {
+            select: { name: true, id: true, image: true, username: true },
+          },
+        },
+      },
+    },
+  });
+  let nextCursor: typeof cursor | undefined;
+  if (data.length > limit) {
+    const nextItem = data.pop();
+    if (nextItem != null) {
+      nextCursor = { id: nextItem.id, createdAt: nextItem.createdAt };
+    }
+  }
+  return {
+    posts: data.map((post) => {
+      return {
+        id: post.id,
+        content: post.content,
+        mediaUrls: post.mediaUrls,
+        createdAt: post.createdAt,
+        likeCount: post._count.likes,
+        commentCount: post._count.comments,
+        author: post.author,
+        likedByMe: post.likes?.length > 0,
+        comments: post.comments,
+      };
+    }),
+    nextCursor,
+  };
+}
+
+async function getSearchedPost({
+  searchTerm,
+  cursor,
+  limit,
+  ctx,
+}: {
+  searchTerm: string | undefined;
+  cursor: { id: string; createdAt: Date } | undefined;
+  limit: number;
+  ctx: inferAsyncReturnType<typeof createTRPCContext>;
+}) {
+  const currentAuthorId = ctx.session?.user.id;
+  const data = await ctx.prisma.post.findMany({
+    where: {
+      content: {
+        contains: searchTerm,
+      },
+    },
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    take: limit + 1,
+    cursor: cursor ? { createdAt_id: cursor } : undefined,
     select: {
       id: true,
       content: true,
