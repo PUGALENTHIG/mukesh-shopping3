@@ -12,11 +12,11 @@ const RegisterForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {},
   } = useForm<IRegister>();
 
   const [error, setError] = React.useState<string | undefined>();
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [loading] = React.useState<boolean>(false);
 
   const registerUser = api.auth.register.useMutation({
     onError: (e) => setError(e.message),

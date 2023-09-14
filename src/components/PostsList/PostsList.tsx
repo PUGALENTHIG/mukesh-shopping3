@@ -52,7 +52,11 @@ const PostsList = ({
   if (posts == null) return null;
 
   if (posts == null || posts.length === 0) {
-    return <h2> No posts to show</h2>;
+    return (
+      <div className="flex justify-center pt-10">
+        <h2> No posts to show</h2>
+      </div>
+    );
   }
 
   return (

@@ -1,5 +1,5 @@
 "use client";
-import { Avatar, Button, image } from "@nextui-org/react";
+import { Avatar, Button } from "@nextui-org/react";
 import React, { type FormEvent } from "react";
 import { useSession } from "next-auth/react";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
@@ -20,7 +20,6 @@ const CreateComment = ({ postId }: CreateCommentProps) => {
   const trpcUtils = api.useContext();
   const createComment = api.post.createComment.useMutation({
     onSuccess: (newComment) => {
-      console.log(newComment);
       setReply("");
 
       if (session.status !== "authenticated") return;
@@ -58,7 +57,9 @@ const CreateComment = ({ postId }: CreateCommentProps) => {
     },
   });
 
+  const ReplyMediaInputRef = React.useRef<HTMLInputElement>(null);
   const replyRef = React.useRef<HTMLTextAreaElement>(null);
+
   const AutoSizeReply = (
     replyRef: HTMLTextAreaElement | null,
     reply: string,
@@ -74,6 +75,37 @@ const CreateComment = ({ postId }: CreateCommentProps) => {
   };
 
   AutoSizeReply(replyRef.current, reply);
+
+  const handleMediaInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return Promise.resolve();
+
+    const selectedImages = Array.from(files).map((file) =>
+      encodeImageToBase64(file),
+    );
+
+    e.target.value = "";
+
+    const encodedImages = await Promise.all(selectedImages);
+    setMediaUrls([...mediaUrls, ...encodedImages]);
+  };
+
+  const encodeImageToBase64 = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (typeof e.target?.result === "string") {
+          resolve(e.target.result);
+        } else {
+          reject(new Error("Failed to read image as base64."));
+        }
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
   function handlePost(e: FormEvent) {
     e.preventDefault();
@@ -112,7 +144,23 @@ const CreateComment = ({ postId }: CreateCommentProps) => {
           <div className="flex flex-row justify-between border-y-1 border-b-0 pt-2">
             <div className="flex flex-row">
               <div className="cursor-pointer rounded-full px-2">
-                <PhotoIcon width={20} />
+                <label
+                  className="cursor-pointer rounded-full px-2"
+                  htmlFor="ReplyMediaInputRef"
+                >
+                  <PhotoIcon width={24} />
+                  <input
+                    aria-label="add image"
+                    id="ReplyMediaInputRef"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    ref={ReplyMediaInputRef}
+                    className="hidden"
+                    onChange={(e) => void handleMediaInput(e)}
+                    disabled={mediaUrls.length === 4 ? true : false}
+                  />
+                </label>
               </div>
               <div className="cursor-pointer rounded-full px-2">
                 <FaceSmileIcon width={20} />

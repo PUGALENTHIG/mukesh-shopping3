@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import { Avatar, Button } from "@nextui-org/react";
 import React, { type FormEvent } from "react";
 import { useSession } from "next-auth/react";
 import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/solid";
 import { api } from "@/utils/api";
-import PostMedia from "../MasonryGrid/MasonryMedia";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
 
 const CreatePost = () => {
@@ -18,7 +16,6 @@ const CreatePost = () => {
   const trpcUtils = api.useContext();
   const createPost = api.post.create.useMutation({
     onSuccess: (newPost) => {
-      console.log(newPost);
       setDraft("");
 
       if (session.status !== "authenticated") return;
@@ -55,7 +52,8 @@ const CreatePost = () => {
       });
     },
   });
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const PostMediaInputRef = React.useRef<HTMLInputElement>(null);
   const draftRef = React.useRef<HTMLTextAreaElement>(null);
 
   const AutoSizeDraft = (
@@ -145,18 +143,18 @@ const CreatePost = () => {
               <div className="flex flex-row">
                 <label
                   className="cursor-pointer rounded-full px-2"
-                  htmlFor="fileInput"
+                  htmlFor="PostMediaInput"
                 >
                   <PhotoIcon width={24} />
                   <input
                     aria-label="add image"
-                    id="fileInput"
+                    id="PostMediaInput"
                     type="file"
                     accept="image/*"
                     multiple
-                    ref={fileInputRef}
+                    ref={PostMediaInputRef}
                     className="hidden"
-                    onChange={(e) => handleMediaInput(e)}
+                    onChange={(e) => void handleMediaInput(e)}
                     disabled={mediaUrls.length === 4 ? true : false}
                   />
                 </label>

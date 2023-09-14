@@ -29,9 +29,9 @@ const ProfileCard = ({
   isFollowing,
 }: ProfileProps) => {
   const trpcUtils = api.useContext();
-  const toggleFollow = api.profile.toggleFollow.useMutation({
+  const toggleFollow = api.user.toggleFollow.useMutation({
     onSuccess: ({ addedFollow }) => {
-      trpcUtils.profile.getUser.setData({ username }, (oldData) => {
+      trpcUtils.user.getUser.setData({ username }, (oldData) => {
         if (oldData == null) return;
 
         const countModifier = addedFollow ? 1 : -1;

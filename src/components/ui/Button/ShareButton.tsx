@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React from "react";
 import { ShareIcon } from "@heroicons/react/24/outline";
 
 type ShareButtonProps = {

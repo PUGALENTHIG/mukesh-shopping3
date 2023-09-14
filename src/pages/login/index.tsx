@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { FormEvent } from "react";
+import React, { type FormEvent } from "react";
 import type {
   GetServerSideProps,
   NextPage,
@@ -27,7 +27,7 @@ const Login: NextPage = ({}: InferGetServerSidePropsType<
     await signIn("credentials", {
       email: authState.email,
       password: authState.password,
-      callbackUrl: "http://localhost:3000/",
+      callbackUrl: "/",
     });
   };
 

@@ -1,7 +1,6 @@
 import React from "react";
 import { Image } from "@nextui-org/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { css } from "@emotion/react";
 
 type MasonryProps = {
   mediaUrls: string[];

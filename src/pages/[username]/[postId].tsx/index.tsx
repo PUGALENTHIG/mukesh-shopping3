@@ -46,7 +46,6 @@ const SinglePost = () => {
         />
         <CreateComment postId={postId} />
       </div>
-      {console.log(router.query)}
       <div>
         {comments?.flatMap((comment) => {
           return <Comment key={comment.id} {...comment} />;

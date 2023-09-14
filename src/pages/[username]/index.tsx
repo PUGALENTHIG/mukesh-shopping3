@@ -24,9 +24,9 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     { username: username },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   );
-  const { data: profile } = api.profile.getUser.useQuery({ username });
+  const { data: user } = api.user.getUser.useQuery({ username });
 
-  const [profileData, setProfileData] = React.useState<typeof profile>({
+  const [profileData, setProfileData] = React.useState<typeof user>({
     id: "",
     name: "",
     image: "",
@@ -40,8 +40,8 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   });
 
   React.useEffect(() => {
-    if (profile) setProfileData({ ...profile });
-  }, [profile]);
+    if (user) setProfileData({ ...user });
+  }, [user]);
 
   if (!profileData) {
     return (
@@ -108,7 +108,7 @@ export async function getStaticProps(
   }
 
   const ssg = ssgHelper();
-  await ssg.profile.getUser.prefetch({ username });
+  await ssg.user.getUser.prefetch({ username });
   return {
     props: {
       trpcState: ssg.dehydrate(),

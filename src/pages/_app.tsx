@@ -17,6 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   const router = useRouter();
+
   return (
     <SessionProvider session={session}>
       <Head>

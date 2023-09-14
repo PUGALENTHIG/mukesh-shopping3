@@ -13,7 +13,6 @@ import { timeAgo } from "@/utils/dateFormat";
 import { useRouter } from "next/router";
 import CommentButton from "@/components/ui/Button/CommentButton";
 import CreateComment from "./CreateComment";
-import PostMedia from "../MasonryGrid/MasonryMedia";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
 import ShareButton from "../ui/Button/ShareButton";
 import EchoButton from "../ui/Button/EchoButton";
@@ -162,7 +161,7 @@ function Post({
       </div>
       <Modal size="4xl" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalBody>
                 <div className="mt-8 flex">

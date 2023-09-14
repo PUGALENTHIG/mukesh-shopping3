@@ -1,5 +1,5 @@
 import React from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -42,7 +42,7 @@ const LeftSidebar = () => {
     {
       text: "Profile",
       icon: <UserIcon />,
-      link: `/${user?.username ?? "auth/login"}`,
+      link: `/${user?.username ?? "login"}`,
     },
   ];
 

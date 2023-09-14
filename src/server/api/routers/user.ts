@@ -6,7 +6,7 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 
-export const profileRouter = createTRPCRouter({
+export const userRouter = createTRPCRouter({
   getUser: publicProcedure
     .input(z.object({ username: z.string() }))
     .query(async ({ input: { username }, ctx }) => {
@@ -42,6 +42,44 @@ export const profileRouter = createTRPCRouter({
         postsCount: profile._count.posts,
         isFollowing: profile.followers.length > 0,
       };
+    }),
+  updateUser: protectedProcedure
+    .input(
+      z.object({
+        username: z.string().optional(),
+        email: z.string().optional(),
+        name: z.string().optional(),
+        image: z.string().optional(),
+        banner: z.string().optional(),
+        bio: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const currentUserId = ctx.session.user.id;
+      const currentUserEmail = ctx.session.user.email;
+      const currentUserUname = ctx.session.user.username;
+
+      const { username, name, image, banner, bio } = input;
+      const updateData = {
+        ...(username ? { username } : {}),
+        ...(name ? { name } : {}),
+        ...(image ? { image } : {}),
+        ...(banner ? { banner } : {}),
+        ...(bio ? { bio } : {}),
+      };
+
+      await ctx.prisma.user.update({
+        where: {
+          id: currentUserId,
+          email: currentUserEmail!,
+          username: currentUserUname!,
+        },
+        data: updateData,
+      });
+
+      void ctx.revalidateSSG?.(`/${currentUserUname}`);
+
+      return { success: true };
     }),
   toggleFollow: protectedProcedure
     .input(z.object({ userId: z.string(), username: z.string() }))

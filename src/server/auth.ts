@@ -5,13 +5,13 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import { loginSchema } from "@/validation/auth";
+/* import { loginSchema } from "@/validation/auth"; */
 
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
+/* import CredentialsProvider from "next-auth/providers/credentials"; */
 
-import argon2 from "argon2";
+/* import argon2 from "argon2"; */
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
 
