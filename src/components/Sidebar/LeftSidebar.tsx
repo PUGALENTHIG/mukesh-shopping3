@@ -42,7 +42,7 @@ const LeftSidebar = () => {
     {
       text: "Profile",
       icon: <UserIcon />,
-      link: `/user/${user?.username}`,
+      link: user?.username ? `/user/${user.username}` : "/api/auth/signin",
     },
   ];
 
