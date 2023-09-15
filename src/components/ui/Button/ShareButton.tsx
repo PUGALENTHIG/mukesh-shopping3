@@ -3,6 +3,7 @@ import { ShareIcon } from "@heroicons/react/24/outline";
 
 type ShareButtonProps = {
   postUrl: string;
+  onClick: unknown;
 };
 
 const ShareButton = ({ postUrl }: ShareButtonProps) => {
@@ -29,11 +30,11 @@ const ShareButton = ({ postUrl }: ShareButtonProps) => {
   };
 
   return (
-    <div className="flex flex-row">
+    <div className="z-10 flex flex-row">
       <button
         aria-label="share"
         type="button"
-        onClick={handleShare}
+        onClick={handleShare as React.MouseEventHandler<HTMLButtonElement>}
         className={`flex flex-row items-center text-gray-500 transition-all duration-75 hover:text-white focus-visible:text-white`}
       >
         <div

@@ -16,6 +16,7 @@ export default {
         dark: {
           colors: {
             background: "#161616",
+            primary: "#8B5CF6",
           },
         },
       },

@@ -16,6 +16,7 @@ import CreateComment from "./CreateComment";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
 import ShareButton from "../ui/Button/ShareButton";
 import EchoButton from "../ui/Button/EchoButton";
+import UserLinkRenderer from "@/utils/UserLinkRenderer";
 
 type PostProps = {
   id: string;
@@ -118,46 +119,89 @@ function Post({
 
   return (
     <>
-      <div className="flex-col border-b px-6 py-4">
-        <div
-          onClick={clickable ? handleClick : () => null}
-          className={`flex ${clickable ? "cursor-pointer" : "cursor-default"} `}
+      <div onClick={() => handleClick()}>
+        <article
+          className={`-z-10 flex flex-col border-b px-6 py-4 ${
+            clickable ? "cursor-pointer" : "cursor-default"
+          } `}
         >
-          <div className="flex h-full flex-col pr-4">
-            <Link href={`/${author.username}`}>
-              <Avatar src={author.image ?? ""} />
-            </Link>
-          </div>
-          <div className="flex flex-grow flex-col">
-            <div className="flex flex-row gap-1">
-              <Link href={`/${author.username}`}>
-                <span className="font-bold outline-none hover:underline">
-                  {author.name}
-                </span>
+          <div className="flex">
+            <div className="z-10 flex h-full flex-col pr-4">
+              <Link
+                onClick={(e) => e.stopPropagation()}
+                href={`/${author.username}`}
+              >
+                <Avatar src={author.image ?? ""} />
               </Link>
-              <span className="px-1 text-gray-400">@{author.username}</span>
-              <span className=" text-gray-400">·</span>
-              <span className="px-1 text-gray-400">{timeAgo(createdAt)}</span>
             </div>
-            <p className="whitespace-pre-wrap py-2">{content}</p>
-            <MasonryGrid
-              setMediaUrls={() => undefined}
-              mediaUrls={mediaUrls ?? []}
-              showClose={false}
+            <div className="flex flex-grow flex-col">
+              <div className="flex flex-row gap-1">
+                <Link
+                  onClick={(e) => e.stopPropagation()}
+                  className="z-10"
+                  href={`/${author.username}`}
+                >
+                  <span className="font-bold outline-none hover:underline">
+                    {author.name}
+                  </span>
+                </Link>
+                <span className="px-1 text-[16px] text-gray-400">
+                  @{author.username}
+                </span>
+                <span className=" text-[16px] text-gray-400">·</span>
+                <span className="px-1  text-[16px] text-gray-400">
+                  {timeAgo(createdAt)}
+                </span>
+              </div>
+              <div className="z-10 py-1">
+                
+                  <UserLinkRenderer
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                      e.stopPropagation()
+                    }
+                    className="font-semibold text-blue-500 hover:underline"
+                    text={content}
+                  />
+                
+              </div>
+              <MasonryGrid
+                setMediaUrls={() => undefined}
+                mediaUrls={mediaUrls ?? []}
+                showClose={false}
+              />
+            </div>
+          </div>
+
+          <div className="mx-2 ml-14 flex  flex-row justify-start gap-20 pt-3">
+            <LikeButton
+              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                e.stopPropagation();
+                handleToggleLike();
+              }}
+              likedByMe={likedByMe}
+              likeCount={likeCount}
+            />
+            <CommentButton
+              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                e.stopPropagation();
+                onOpen();
+              }}
+              commentCount={commentCount}
+            />
+            <EchoButton
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.stopPropagation();
+              }}
+              EchoCount={0}
+            />
+            <ShareButton
+              postUrl={postUrl}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.stopPropagation();
+              }}
             />
           </div>
-        </div>
-
-        <div className="mx-2 ml-14 flex  flex-row justify-start gap-20 pt-3">
-          <LikeButton
-            onClick={handleToggleLike}
-            likedByMe={likedByMe}
-            likeCount={likeCount}
-          />
-          <CommentButton onClick={onOpen} commentCount={commentCount} />
-          <EchoButton onClick={() => null} EchoCount={0} />
-          <ShareButton postUrl={postUrl} />
-        </div>
+        </article>
       </div>
       <Modal size="4xl" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>

@@ -2,9 +2,13 @@
 import React from "react";
 import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { api } from "@/utils/api";
 import type { IRegister } from "@/validation/auth";
+import { useTheme } from "next-themes";
+import Logo from "/public/echo.png";
+import LogoWhite from "/public/echo-white.png";
 
 const RegisterForm = () => {
   const router = useRouter();
@@ -18,9 +22,24 @@ const RegisterForm = () => {
   const [error, setError] = React.useState<string | undefined>();
   const [loading] = React.useState<boolean>(false);
 
+  const { resolvedTheme } = useTheme();
+  let LogoSrc;
+
+  switch (resolvedTheme) {
+    case "light":
+      LogoSrc = Logo;
+      break;
+    case "dark":
+      LogoSrc = LogoWhite;
+      break;
+    default:
+      LogoSrc = LogoWhite;
+      break;
+  }
+
   const registerUser = api.auth.register.useMutation({
     onError: (e) => setError(e.message),
-    onSuccess: () => router.push("auth/login"),
+    onSuccess: () => router.push("/login"),
   });
 
   const onSubmit: SubmitHandler<IRegister> = async (data) => {
@@ -31,7 +50,9 @@ const RegisterForm = () => {
   return (
     <div className="container mx-auto flex max-w-md items-center justify-center px-6">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-        <div className="mx-auto flex justify-center">Logo</div>
+        <div className="mx-auto flex justify-center">
+          <Image alt="branding" src={LogoSrc} width={40} height={40} />
+        </div>
         <div className=" mt-8 flex w-full flex-col items-center gap-4 ">
           <span className="absolute"></span>
           {error && <p className="text-center text-red-600">{error}</p>}

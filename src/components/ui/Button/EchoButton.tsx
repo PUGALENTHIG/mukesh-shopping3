@@ -2,7 +2,7 @@ import React from "react";
 import { useSession } from "next-auth/react";
 
 type EchoButtonProps = {
-  onClick: () => void;
+  onClick: unknown;
   EchoCount: number;
 };
 
@@ -12,7 +12,7 @@ function EchoButton({ onClick, EchoCount }: EchoButtonProps) {
   if (session.status !== "authenticated") {
     return (
       <div className="m-1 flex items-center gap-3 self-start text-gray-500">
-        <div className="w-5">
+        <div className="w-5 fill-gray-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             data-name="Layer 1"
@@ -30,10 +30,10 @@ function EchoButton({ onClick, EchoCount }: EchoButtonProps) {
   }
 
   return (
-    <div className="flex flex-row">
+    <div className="z-10 flex flex-row">
       <button
         type="button"
-        onClick={onClick}
+        onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
         className={`group flex flex-row items-center text-gray-500 transition-all duration-75 hover:text-green-500 focus-visible:text-green-500`}
       >
         <div

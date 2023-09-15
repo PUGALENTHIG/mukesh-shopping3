@@ -3,8 +3,9 @@ import { Avatar, Button } from "@nextui-org/react";
 import React, { type FormEvent } from "react";
 import { useSession } from "next-auth/react";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
-import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 import { api } from "@/utils/api";
+import EmojiPicker from "../ui/Button/EmojiPicker";
 
 type CreateCommentProps = {
   postId: string;
@@ -143,30 +144,26 @@ const CreateComment = ({ postId }: CreateCommentProps) => {
           />
           <div className="flex flex-row justify-between border-y-1 border-b-0 pt-2">
             <div className="flex flex-row">
-              <div className="cursor-pointer rounded-full px-2">
-                <label
-                  className="cursor-pointer rounded-full px-2"
-                  htmlFor="ReplyMediaInputRef"
-                >
-                  <PhotoIcon width={24} />
-                  <input
-                    aria-label="add image"
-                    id="ReplyMediaInputRef"
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    ref={ReplyMediaInputRef}
-                    className="hidden"
-                    onChange={(e) => void handleMediaInput(e)}
-                    disabled={mediaUrls.length === 4 ? true : false}
-                  />
-                </label>
-              </div>
-              <div className="cursor-pointer rounded-full px-2">
-                <FaceSmileIcon width={20} />
-              </div>
+              <label
+                className="cursor-pointer rounded-full px-2"
+                htmlFor="ReplyMediaInputRef"
+              >
+                <PhotoIcon className="text-violet-500" width={24} />
+                <input
+                  aria-label="add image"
+                  id="ReplyMediaInputRef"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  ref={ReplyMediaInputRef}
+                  className="hidden"
+                  onChange={(e) => void handleMediaInput(e)}
+                  disabled={mediaUrls.length === 4 ? true : false}
+                />
+              </label>
+              <EmojiPicker content={reply} setContent={setReply} />
             </div>
-            <Button type="submit" className="w-8">
+            <Button type="submit" className="w-8 bg-violet-500 font-semibold">
               Reply
             </Button>
           </div>

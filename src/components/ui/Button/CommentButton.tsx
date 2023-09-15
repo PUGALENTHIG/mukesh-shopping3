@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
 
 type CommentButtonProps = {
-  onClick: () => void;
+  onClick: unknown;
   commentCount: number;
 };
 
@@ -21,10 +21,10 @@ function CommentButton({ onClick, commentCount }: CommentButtonProps) {
   }
 
   return (
-    <div className="flex flex-row">
+    <div className="z-10 flex flex-row">
       <button
         type="button"
-        onClick={onClick}
+        onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
         className={`group flex flex-row items-center text-gray-500 transition-all duration-75 hover:text-blue-500 focus-visible:text-blue-500`}
       >
         <div

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { timeAgo } from "@/utils/dateFormat";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
 import EchoButton from "../ui/Button/EchoButton";
+import UserLinkRenderer from "@/utils/UserLinkRenderer";
 
 type CommentProps = {
   createdAt: Date;
@@ -19,13 +20,7 @@ type CommentProps = {
   };
 };
 
-const Comment = ({
-  /* mediaUrls,  */
-  createdAt,
-  author,
-  content,
-  mediaUrls,
-}: CommentProps) => {
+const Comment = ({ createdAt, author, content, mediaUrls }: CommentProps) => {
   return (
     <div className="border-b p-4">
       <div className={`flex cursor-default`}>
@@ -45,7 +40,13 @@ const Comment = ({
             <span className=" text-gray-400">·</span>
             <span className="px-1 text-gray-400">{timeAgo(createdAt)}</span>
           </div>
-          <p className="whitespace-pre-wrap py-2">{content}</p>
+          <UserLinkRenderer
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+              e.stopPropagation()
+            }
+            className="font-semibold text-blue-500 hover:underline"
+            text={content}
+          />
           <MasonryGrid
             mediaUrls={mediaUrls ?? []}
             setMediaUrls={() => undefined}

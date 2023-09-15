@@ -21,13 +21,13 @@ export default function Home() {
             >
               <Tabs.List className="flex shrink-0 ">
                 <Tabs.Trigger
-                  className=" flex h-[45px] flex-1 select-none items-center justify-center border-black transition-all duration-100 data-[state=active]:border-b-4"
+                  className=" flex h-[45px] flex-1 select-none items-center justify-center transition-all duration-100 data-[state=active]:border-b-5 data-[state=active]:border-violet-500"
                   value="recent"
                 >
                   Recent
                 </Tabs.Trigger>
                 <Tabs.Trigger
-                  className=" flex h-[45px] flex-1 select-none items-center justify-center border-black transition-all duration-100 data-[state=active]:border-b-4 "
+                  className=" flex h-[45px] flex-1 select-none items-center justify-center transition-all duration-100 data-[state=active]:border-b-4 data-[state=active]:border-violet-500 "
                   value="following"
                 >
                   Following

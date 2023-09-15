@@ -5,7 +5,7 @@ import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
 
 type LikeButtonProps = {
-  onClick: () => void;
+  onClick: unknown;
   likedByMe: boolean;
   likeCount: number;
 };
@@ -24,10 +24,10 @@ function LikeButton({ onClick, likedByMe, likeCount }: LikeButtonProps) {
   }
 
   return (
-    <div className="flex flex-row">
+    <div className="z-10 flex flex-row">
       <button
         type="button"
-        onClick={onClick}
+        onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
         className={`group flex flex-row items-center transition-all duration-75 ${
           likedByMe
             ? `text-red-500`

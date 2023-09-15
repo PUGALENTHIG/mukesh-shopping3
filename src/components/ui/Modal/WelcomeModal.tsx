@@ -13,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { api } from "@/utils/api";
+import { useRouter } from "next/router";
 
 const profileFallback = "./default-profile.jpg";
 
@@ -37,6 +38,7 @@ const WelcomeModal = ({
   email,
   isOpen,
 }: WelcomeModalProps) => {
+  const router = useRouter();
   const { onOpenChange } = useDisclosure();
   const [profileData, setProfileData] = React.useState({
     id: id,
@@ -83,7 +85,12 @@ const WelcomeModal = ({
 
   function handleUpdateProfile(e: FormEvent) {
     e.preventDefault();
-    updateUser.mutate({ ...profileData });
+    try {
+      updateUser.mutate({ ...profileData });
+    } catch (error) {
+      console.log(error);
+    }
+    router.reload();
   }
 
   return (
@@ -189,11 +196,11 @@ const WelcomeModal = ({
                     </div>
                     <div className="flex justify-end pt-2">
                       <Button
-                        color="primary"
+                        className="bg-violet-500 font-semibold"
                         type="submit"
                         onClick={handleUpdateProfile}
                       >
-                        Action
+                        Update Profile
                       </Button>
                     </div>
                   </div>

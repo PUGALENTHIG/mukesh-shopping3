@@ -2,9 +2,10 @@
 import { Avatar, Button } from "@nextui-org/react";
 import React, { type FormEvent } from "react";
 import { useSession } from "next-auth/react";
-import { PhotoIcon, FaceSmileIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 import { api } from "@/utils/api";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
+import EmojiPicker from "../ui/Button/EmojiPicker";
 
 const CreatePost = () => {
   const [draft, setDraft] = React.useState<string>("");
@@ -145,7 +146,7 @@ const CreatePost = () => {
                   className="cursor-pointer rounded-full px-2"
                   htmlFor="PostMediaInput"
                 >
-                  <PhotoIcon width={24} />
+                  <PhotoIcon className="text-violet-500" width={24} />
                   <input
                     aria-label="add image"
                     id="PostMediaInput"
@@ -158,11 +159,9 @@ const CreatePost = () => {
                     disabled={mediaUrls.length === 4 ? true : false}
                   />
                 </label>
-                <div className="cursor-pointer rounded-full px-2">
-                  <FaceSmileIcon width={24} />
-                </div>
+                <EmojiPicker content={draft} setContent={setDraft} />
               </div>
-              <Button type="submit" className="w-8">
+              <Button type="submit" className="w-8 bg-violet-500 font-semibold">
                 Post
               </Button>
             </div>

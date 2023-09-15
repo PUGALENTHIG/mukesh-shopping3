@@ -1,9 +1,8 @@
 import React from "react";
 import { api } from "@/utils/api";
-import { Avatar, Button, Image } from "@nextui-org/react";
+import { Avatar, Button, Image, Skeleton } from "@nextui-org/react";
 import pluralize from "@/utils/pluralize";
 import { useSession } from "next-auth/react";
-const profileFallback = "./default-profile.jpg";
 
 type ProfileProps = {
   id: string;
@@ -56,15 +55,16 @@ const ProfileCard = ({
             radius="none"
           />
         ) : (
-          <div className="fallback h-full w-full bg-gray-600"></div>
+          <Skeleton className="fallback h-full w-full bg-gray-600"></Skeleton>
         )}
       </div>
       <div className="mx-6 flex flex-row justify-between">
-        <Avatar
-          className="-mt-16  h-32 w-32"
-          isBordered
-          src={image ?? profileFallback}
-        />
+        {image ? (
+          <Avatar className="-mt-16  h-32 w-32" isBordered src={image} />
+        ) : (
+          <Skeleton className="-mt-16 h-32 w-32 rounded-full"></Skeleton>
+        )}
+
         <FollowButton
           userId={id}
           isFollowing={isFollowing}
@@ -75,9 +75,21 @@ const ProfileCard = ({
         />
       </div>
       <div className="mx-6 my-4">
-        <div className="pfp text-xl font-bold">{name}</div>
-        <div className="username ">@{username}</div>
-        <div className="bio mt-3">{bio}</div>
+        {name ? (
+          <div className="pfp text-xl font-bold">{name}</div>
+        ) : (
+          <Skeleton className="mt-2 w-fit text-xl">
+            Echo User Full Name
+          </Skeleton>
+        )}
+        {username ? (
+          <div className="username text-medium text-gray-400">@{username}</div>
+        ) : (
+          <Skeleton className="username w-fit text-medium">
+            Echo Username
+          </Skeleton>
+        )}
+        <div className="bio my-3">{bio}</div>
         <div className="my-1 flex flex-row">
           <div>
             <span className="font-semibold">{followingCount}</span>
