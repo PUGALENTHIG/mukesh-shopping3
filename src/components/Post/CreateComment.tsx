@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { api } from "@/utils/api";
+import { useToast } from "../ContextProviders/ToastContext";
 import EmojiPicker from "../ui/Button/EmojiPicker";
 
 type CreateCommentProps = {
@@ -17,6 +18,8 @@ const CreateComment = ({ postId }: CreateCommentProps) => {
 
   const session = useSession();
   const user = session.data?.user;
+
+  const { showErrorToast } = useToast();
 
   const trpcUtils = api.useContext();
   const createComment = api.post.createComment.useMutation({
@@ -110,12 +113,15 @@ const CreateComment = ({ postId }: CreateCommentProps) => {
 
   function handlePost(e: FormEvent) {
     e.preventDefault();
-
-    createComment.mutate({
-      postId: postId,
-      content: reply,
-      mediaUrls: mediaUrls,
-    });
+    if (!reply) {
+      showErrorToast("Comment cannot be empty");
+    } else {
+      createComment.mutate({
+        postId: postId,
+        content: reply,
+        mediaUrls: mediaUrls,
+      });
+    }
   }
 
   return (
@@ -124,7 +130,16 @@ const CreateComment = ({ postId }: CreateCommentProps) => {
         <Avatar radius="full" size="md" src={user?.image ?? ""} />
       </div>
       <div className="flex w-full flex-col text-xl">
-        <form onSubmit={handlePost}>
+        <form
+          onSubmit={
+            session.status === "authenticated"
+              ? handlePost
+              : (e) => {
+                  e.preventDefault();
+                  showErrorToast("Login to comment");
+                }
+          }
+        >
           <textarea
             id="reply-input"
             value={reply}

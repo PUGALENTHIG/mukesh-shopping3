@@ -63,6 +63,7 @@ const LeftSidebar = () => {
         {SidebarButtons.map((SidebarButton, i) => (
           <Link replace key={i} href={SidebarButton.link}>
             <Button
+              fullWidth
               variant="light"
               className="flex justify-start px-8 py-6"
               startContent={

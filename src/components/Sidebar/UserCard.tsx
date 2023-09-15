@@ -25,16 +25,16 @@ interface User {
 const UserCard = ({ user }: { user: User }) => {
   return (
     <Dropdown>
-      <Card className="flex px-1">
+      <Card shadow="sm" className="elevation-1 flex px-1">
         <CardHeader className="justify-between">
           <div className="flex gap-5">
             <Avatar radius="full" size="md" src={user.image ?? ""} />
             <div className="flex flex-col items-start justify-center gap-1">
-              <h4 className="text-small font-semibold leading-none text-default-600">
+              <h4 className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold leading-none text-default-600">
                 {user.name}
               </h4>
-              <h5 className="text-small tracking-tight text-default-400">
-                {user.username ?? "username"}
+              <h5 className="overflow-hidden text-ellipsis whitespace-nowrap text-small tracking-tight text-default-400">
+                {`@${user.username}` ?? "username"}
               </h5>
             </div>
           </div>

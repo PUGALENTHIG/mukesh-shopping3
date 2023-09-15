@@ -8,6 +8,8 @@ import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider } from "next-themes";
+import { ToastProvider } from "@/components/ContextProviders/ToastContext";
+import { useTheme } from "next-themes";
 
 import AppLayout from "@/components/Layouts/AppLayout";
 import AuthLayout from "@/components/Layouts/AuthLayout";
@@ -17,7 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   const router = useRouter();
-
+  const { resolvedTheme } = useTheme();
   return (
     <SessionProvider session={session}>
       <Head>
@@ -29,15 +31,17 @@ const MyApp: AppType<{ session: Session | null }> = ({
       </Head>
       <NextUIProvider>
         <ThemeProvider attribute="class" defaultTheme="dark">
-          {router.pathname.includes("/auth") ? (
-            <AuthLayout>
-              <Component {...pageProps} />
-            </AuthLayout>
-          ) : (
-            <AppLayout>
-              <Component {...pageProps} />
-            </AppLayout>
-          )}
+          <ToastProvider theme={resolvedTheme ?? "dark"}>
+            {router.pathname.includes("/auth") ? (
+              <AuthLayout>
+                <Component {...pageProps} />
+              </AuthLayout>
+            ) : (
+              <AppLayout>
+                <Component {...pageProps} />
+              </AppLayout>
+            )}
+          </ToastProvider>
         </ThemeProvider>
       </NextUIProvider>
     </SessionProvider>

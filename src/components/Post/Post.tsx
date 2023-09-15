@@ -141,7 +141,7 @@ function Post({
                   className="z-10"
                   href={`/user/${author.username}`}
                 >
-                  <span className="font-bold outline-none hover:underline">
+                  <span className="overflow-hidden text-ellipsis whitespace-nowrap font-bold outline-none hover:underline">
                     {author.name}
                   </span>
                 </Link>

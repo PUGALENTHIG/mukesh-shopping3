@@ -1,5 +1,6 @@
 import React from "react";
 import { ShareIcon } from "@heroicons/react/24/outline";
+import { useToast } from "@/components/ContextProviders/ToastContext";
 
 type ShareButtonProps = {
   postUrl: string;
@@ -7,6 +8,8 @@ type ShareButtonProps = {
 };
 
 const ShareButton = ({ postUrl }: ShareButtonProps) => {
+  const { showSuccessToast, showErrorToast } = useToast();
+
   const handleShare = () => {
     let hostname;
     try {
@@ -17,15 +20,15 @@ const ShareButton = ({ postUrl }: ShareButtonProps) => {
       navigator.clipboard
         .writeText(hostname ?? postUrl)
         .then(() => {
-          alert("Post URL copied to clipboard!");
+          showSuccessToast("Post URL copied to clipboard!");
         })
         .catch((err) => {
           console.error("Error copying to clipboard:", err);
-          alert("Unable to copy the URL to clipboard.");
+          showErrorToast("Unable to copy the URL to clipboard.");
         });
     } catch (err) {
       console.error("Clipboard API not supported:", err);
-      alert("Clipboard API not supported in this browser.");
+      showErrorToast("Clipboard API not supported in this browser.");
     }
   };
 

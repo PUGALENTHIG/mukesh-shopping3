@@ -6,6 +6,7 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import { api } from "@/utils/api";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
 import EmojiPicker from "../ui/Button/EmojiPicker";
+import { useToast } from "../ContextProviders/ToastContext";
 
 const CreatePost = () => {
   const [draft, setDraft] = React.useState<string>("");
@@ -13,6 +14,8 @@ const CreatePost = () => {
 
   const session = useSession();
   const user = session.data?.user;
+
+  const { showErrorToast } = useToast();
 
   const trpcUtils = api.useContext();
   const createPost = api.post.create.useMutation({
@@ -106,9 +109,12 @@ const CreatePost = () => {
 
   function handlePost(e: FormEvent) {
     e.preventDefault();
-
-    createPost.mutate({ content: draft, mediaUrls: mediaUrls });
-    setMediaUrls([]);
+    if (!draft) {
+      showErrorToast("Post cannot be empty");
+    } else {
+      createPost.mutate({ content: draft, mediaUrls: mediaUrls });
+      setMediaUrls([]);
+    }
   }
 
   return (
@@ -117,7 +123,16 @@ const CreatePost = () => {
         <Avatar radius="full" size="md" src={user?.image ?? ""} />
       </div>
       <div className="flex w-full flex-col text-xl">
-        <form onSubmit={handlePost}>
+        <form
+          onSubmit={
+            session.status === "authenticated"
+              ? handlePost
+              : (e) => {
+                  e.preventDefault();
+                  showErrorToast("Login to create posts");
+                }
+          }
+        >
           <div className="flex flex-row">
             <textarea
               id="draft-input"

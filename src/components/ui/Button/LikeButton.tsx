@@ -1,5 +1,6 @@
 import React from "react";
 import { useSession } from "next-auth/react";
+import { useToast } from "@/components/ContextProviders/ToastContext";
 
 import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
@@ -14,10 +15,15 @@ function LikeButton({ onClick, likedByMe, likeCount }: LikeButtonProps) {
   const session = useSession();
   const LikeIcon = likedByMe ? HeartSolid : HeartOutline;
 
+  const { showErrorToast } = useToast();
+
   if (session.status !== "authenticated") {
     return (
       <div className="m-1 flex items-center gap-3 self-start text-gray-500">
-        <LikeIcon className="w-5" />
+        <LikeIcon
+          onClick={() => showErrorToast("Login to like posts")}
+          className="w-5"
+        />
         <span>{likeCount}</span>
       </div>
     );

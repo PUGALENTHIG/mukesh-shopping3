@@ -85,11 +85,16 @@ const ProfileCard = ({
         {username ? (
           <div className="username text-medium text-gray-400">@{username}</div>
         ) : (
-          <Skeleton className="username w-fit text-medium">
+          <Skeleton className="username mt-3 w-fit text-medium">
             Echo Username
           </Skeleton>
         )}
-        <div className="bio my-3">{bio}</div>
+        {bio ? (
+          <div className="bio my-3">{bio}</div>
+        ) : (
+          <Skeleton className="bio my-3 h-6 w-48"></Skeleton>
+        )}
+        <Skeleton className="bio my-3 w-fit"></Skeleton>
         <div className="my-1 flex flex-row">
           <div>
             <span className="font-semibold">{followingCount}</span>
