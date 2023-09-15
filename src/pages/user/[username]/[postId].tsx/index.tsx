@@ -8,7 +8,6 @@ import { api } from "@/utils/api";
   InferGetStaticPropsType,
   NextPage,
 } from "next"; */
-import Link from "next/link";
 import { Button } from "@nextui-org/react";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import PostsList from "@/components/PostsList/PostsList";
@@ -27,11 +26,14 @@ const SinglePost = () => {
       <div>
         <nav className="sticky top-0 z-50 flex w-full flex-col border-y backdrop-blur-xl">
           <div className="flex flex-row items-center py-2 pl-4">
-            <Link href="..">
-              <Button variant="light" radius="full" isIconOnly>
-                <ArrowLeftIcon width={20} />
-              </Button>
-            </Link>
+            <Button
+              onClick={() => history.back()}
+              variant="light"
+              radius="full"
+              isIconOnly
+            >
+              <ArrowLeftIcon width={20} />
+            </Button>
 
             <span className="ml-6 text-lg font-bold">Post</span>
           </div>

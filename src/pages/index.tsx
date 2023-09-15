@@ -7,7 +7,7 @@ import CreatePost from "@/components/Post/CreatePost";
 import PostsList from "@/components/PostsList/PostsList";
 
 export default function Home() {
-  const [tab, setTab] = React.useState("recent");
+  const [tab, setTab] = React.useState<string>("recent");
   return (
     <>
       <main className="flex w-full flex-col items-center justify-center">

@@ -103,7 +103,7 @@ function Post({
     },
   });
 
-  const postUrl = `/${author.username}/${id}`;
+  const postUrl = `/user/${author.username}/${id}`;
 
   const handleToggleLike = () => {
     try {
@@ -129,7 +129,7 @@ function Post({
             <div className="z-10 flex h-full flex-col pr-4">
               <Link
                 onClick={(e) => e.stopPropagation()}
-                href={`/${author.username}`}
+                href={`/user/${author.username}`}
               >
                 <Avatar src={author.image ?? ""} />
               </Link>
@@ -139,7 +139,7 @@ function Post({
                 <Link
                   onClick={(e) => e.stopPropagation()}
                   className="z-10"
-                  href={`/${author.username}`}
+                  href={`/user/${author.username}`}
                 >
                   <span className="font-bold outline-none hover:underline">
                     {author.name}
@@ -154,15 +154,13 @@ function Post({
                 </span>
               </div>
               <div className="z-10 py-1">
-                
-                  <UserLinkRenderer
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                      e.stopPropagation()
-                    }
-                    className="font-semibold text-blue-500 hover:underline"
-                    text={content}
-                  />
-                
+                <UserLinkRenderer
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                    e.stopPropagation()
+                  }
+                  className="font-semibold text-violet-500 hover:underline"
+                  text={content}
+                />
               </div>
               <MasonryGrid
                 setMediaUrls={() => undefined}

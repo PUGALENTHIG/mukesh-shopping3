@@ -39,7 +39,7 @@ const RegisterForm = () => {
 
   const registerUser = api.auth.register.useMutation({
     onError: (e) => setError(e.message),
-    onSuccess: () => router.push("/login"),
+    onSuccess: () => router.push("/auth/login"),
   });
 
   const onSubmit: SubmitHandler<IRegister> = async (data) => {
@@ -59,12 +59,14 @@ const RegisterForm = () => {
           <Input
             type="text"
             label="Name"
+            autoComplete="none"
             {...register("name", { required: true })}
           />
           {error && <p className="text-center text-red-600">{error}</p>}
           <Input
             type="username"
             label="Username"
+            autoComplete="none"
             pattern="^[a-zA-Z]\w{3,14}$"
             startContent="@"
             {...register("username", { required: true })}
@@ -73,6 +75,7 @@ const RegisterForm = () => {
           <Input
             type="email"
             label="Email"
+            autoComplete="none"
             {...register("email", { required: true })}
           />
           {error && <p className="text-center text-red-600">{error}</p>}

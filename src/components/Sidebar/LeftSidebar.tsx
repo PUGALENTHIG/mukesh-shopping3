@@ -42,7 +42,7 @@ const LeftSidebar = () => {
     {
       text: "Profile",
       icon: <UserIcon />,
-      link: `/${user?.username ?? "login"}`,
+      link: `/user/${user?.username}`,
     },
   ];
 
