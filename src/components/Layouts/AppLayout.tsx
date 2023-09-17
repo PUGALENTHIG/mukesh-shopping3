@@ -26,7 +26,7 @@ const AppLayout = ({ children }: PropsWithChildren) => {
   return (
     <div className="container mx-auto flex flex-row items-start">
       <LeftSidebar />
-      <div className="min-h-screen flex-grow border-x">
+      <div className="min-h-screen max-w-[100vw] flex-grow border-x">
         {welcomeModal && <WelcomeModal {...user} isOpen={welcomeModal} />}
         {children}
       </div>

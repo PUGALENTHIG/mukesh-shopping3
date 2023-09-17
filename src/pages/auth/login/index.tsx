@@ -21,12 +21,15 @@ import Link from "next/link";
 const Login: NextPage = ({}: InferGetServerSidePropsType<
   typeof getServerSideProps
 >) => {
-  const [authState, setAuthState] = React.useState({ email: "", password: "" });
+  const [authState, setAuthState] = React.useState({
+    username: "",
+    password: "",
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await signIn("credentials", {
-      email: authState.email,
+      username: authState.username,
       password: authState.password,
       callbackUrl: "/",
     });
@@ -41,13 +44,13 @@ const Login: NextPage = ({}: InferGetServerSidePropsType<
         <form onSubmit={handleSubmit} className="mt-6">
           <div>
             <Input
-              label="Email"
-              title="Email"
-              id="email"
-              type="email"
-              value={authState.email}
+              label="Username"
+              title="Username"
+              id="username"
+              type="username"
+              value={authState.username}
               onChange={(e) =>
-                setAuthState({ ...authState, email: e.target.value })
+                setAuthState({ ...authState, username: e.target.value })
               }
               required
             />

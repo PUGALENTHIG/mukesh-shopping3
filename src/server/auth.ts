@@ -5,15 +5,16 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-/* import { loginSchema } from "@/validation/auth"; */
+import { loginSchema } from "@/validation/auth";
 
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
-/* import CredentialsProvider from "next-auth/providers/credentials"; */
+import CredentialsProvider from "next-auth/providers/credentials";
 
-/* import argon2 from "argon2"; */
+import argon2 from "argon2";
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
+import { type User } from "@prisma/client";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -38,7 +39,7 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: async ({ session, user }) => {
+    session: async ({ session, user /* token */ }) => {
       if (user) {
         // Fetch the user's username from the database based on their ID
         const dbUser = await prisma.user.findUnique({
@@ -56,15 +57,28 @@ export const authOptions: NextAuthOptions = {
           };
         }
       }
-
+      /*  session.user.id = token.id as string;
+      session.user.username = token.username as string; */
       return session;
+    },
+    jwt({ token, account, user }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.id = user.id;
+        token.username = (user as User).username;
+        console.log({ user });
+      }
+      return token;
     },
   },
   secret: env.NEXTAUTH_SECRET,
-  /*  pages: {
-    signIn: "/login",
+  pages: {
+    /* signIn: "/login",
     newUser: "/register",
-    error: "/login",
+    error: "/login", */
+  },
+  /*   session: {
+    strategy: "jwt",
   }, */
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -76,40 +90,31 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
-    /* CredentialsProvider({
-      name: "credentials",
+    CredentialsProvider({
       credentials: {
-        email: {},
+        username: {},
         password: {},
       },
-      authorize: async (credentials) => {
+      async authorize(credentials) {
         const cred = await loginSchema.parseAsync(credentials);
         const user = await prisma.user.findFirst({
-          where: {
-            email: cred.email,
-          },
+          where: { username: cred.username },
         });
 
         if (!user) {
           return null;
         }
 
-        const passwordIsValid = await argon2.verify(
+        const isPasswordValid = await argon2.verify(
           user.password!,
           cred.password,
         );
 
-        if (!passwordIsValid) {
-          return null;
-        }
+        if (!isPasswordValid) return null;
 
-        return {
-          id: user.id,
-          email: user.email,
-          username: user.username,
-        };
+        return user;
       },
-    }), */
+    }),
   ],
 };
 
