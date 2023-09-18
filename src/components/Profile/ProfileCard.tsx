@@ -121,7 +121,7 @@ const ProfileCard = ({
           </div>
         </div>
 
-        <EditProfileModal {...user} activity="update" isOpen={openEditModal} />
+        {/* <EditProfileModal {...user} activity="update" isOpen={openEditModal} /> */}
       </div>
     </div>
   );
