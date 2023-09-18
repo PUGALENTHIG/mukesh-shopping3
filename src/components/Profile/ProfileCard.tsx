@@ -30,11 +30,6 @@ const ProfileCard = ({
   isFollowing,
 }: ProfileProps) => {
   const session = useSession();
-  const [user, setUser] = React.useState({ ...session.data?.user });
-
-  React.useEffect(() => {
-    setUser({ ...session.data?.user });
-  }, [session]);
 
   const [openEditModal, setOpenEditModal] = React.useState(false);
 
