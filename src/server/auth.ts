@@ -90,7 +90,7 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
-    CredentialsProvider({
+    /* CredentialsProvider({
       credentials: {
         username: {},
         password: {},
@@ -114,7 +114,7 @@ export const authOptions: NextAuthOptions = {
 
         return user;
       },
-    }),
+    }), */
   ],
 };
 

@@ -126,7 +126,7 @@ function Post({
           } `}
         >
           <div className="flex">
-            <div className="z-10 flex h-full flex-col pr-3 lg:pr-4">
+            <div className="z-10 flex h-full flex-col pr-[10px] md:pr-3 lg:pr-4">
               <Link
                 onClick={(e) => e.stopPropagation()}
                 href={`/user/${author.username}`}
@@ -134,22 +134,22 @@ function Post({
                 <Avatar src={author.image ?? ""} />
               </Link>
             </div>
-            <div className="flex flex-grow flex-col text-xs xl:text-base">
-              <div className="flex flex-row gap-1">
+            <div className="flex flex-grow flex-col">
+              <div className="flex flex-row items-center gap-1">
                 <Link
                   onClick={(e) => e.stopPropagation()}
                   className="z-10"
                   href={`/user/${author.username}`}
                 >
-                  <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold outline-none hover:underline">
+                  <span className=" overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold outline-none hover:underline sm:max-w-[10px] lg:w-auto lg:text-base">
                     {author.name}
                   </span>
                 </Link>
-                <span className="overflow-hidden text-ellipsis whitespace-nowrap px-1 text-gray-400">
+                <span className=" overflow-hidden text-ellipsis whitespace-nowrap px-[2px] text-xs text-gray-400 md:px-1 lg:text-sm">
                   @{author.username}
                 </span>
                 <span className=" text-gray-400">·</span>
-                <span className="overflow-hidden text-ellipsis whitespace-nowrap px-1 text-gray-400">
+                <span className=" overflow-hidden text-ellipsis whitespace-nowrap px-[2px] text-xs text-gray-400 md:px-1 lg:text-sm">
                   {timeAgo(createdAt)}
                 </span>
               </div>
@@ -158,7 +158,7 @@ function Post({
                   onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
                     e.stopPropagation()
                   }
-                  className="font-semibold text-violet-500 hover:underline"
+                  className="text-base font-semibold text-violet-500 hover:underline md:text-lg"
                   text={content}
                 />
               </div>
@@ -170,7 +170,7 @@ function Post({
             </div>
           </div>
 
-          <div className="mx-2 ml-14 flex  flex-row justify-start gap-10 pt-3 lg:gap-20">
+          <div className="z-10 mx-2 ml-14 flex flex-row justify-start gap-6 md:gap-10 lg:gap-20">
             <LikeButton
               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 e.stopPropagation();
@@ -194,9 +194,9 @@ function Post({
             />
             <ShareButton
               postUrl={postUrl}
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                e.stopPropagation();
-              }}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                e.stopPropagation()
+              }
             />
           </div>
         </article>

@@ -44,7 +44,7 @@ const ShareButton = ({ postUrl }: ShareButtonProps) => {
           className={`group-hover-bg-white rounded-full p-2 outline-white transition-colors duration-100 hover:bg-white hover:bg-opacity-20 focus-visible:bg-white group-focus-visible:bg-white`}
         >
           <ShareIcon
-            className={`w-5 transition-colors  duration-75 group-hover:text-white group-focus-visible:fill-white`}
+            className={`w-4 transition-colors duration-75  group-hover:text-white group-focus-visible:fill-white lg:w-5`}
           />
         </div>
       </button>

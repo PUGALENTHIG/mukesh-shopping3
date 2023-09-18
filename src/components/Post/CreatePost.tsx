@@ -118,7 +118,7 @@ const CreatePost = () => {
   }
 
   return (
-    <div className="flex w-full flex-row border-b-1 px-6 py-4">
+    <div className="flex w-full flex-row border-b-1 px-3 py-4 md:px-6">
       <div className="h-full pr-4">
         <Avatar radius="full" size="md" src={user?.image ?? ""} />
       </div>
@@ -141,7 +141,7 @@ const CreatePost = () => {
                 setDraft(e.target.value);
               }}
               placeholder="What's on your mind?"
-              className="my-2 w-full resize-none bg-inherit px-2 py-2"
+              className="w-full resize-none bg-inherit px-2 py-2"
               ref={draftRef}
               rows={1}
               maxLength={280}

@@ -22,9 +22,9 @@ function LikeButton({ onClick, likedByMe, likeCount }: LikeButtonProps) {
       <div className="m-1 flex items-center gap-3 self-start text-gray-500">
         <LikeIcon
           onClick={() => showErrorToast("Login to like posts")}
-          className="w-5"
+          className="w-4 lg:w-5"
         />
-        <span>{likeCount}</span>
+        <span className="text ml-2 text-sm lg:text-base">{likeCount}</span>
       </div>
     );
   }
@@ -44,14 +44,14 @@ function LikeButton({ onClick, likedByMe, likeCount }: LikeButtonProps) {
           className={`group-hover-bg-red-500 rounded-full p-2 outline-red-500 transition-colors duration-100 focus-visible:bg-red-500 group-hover:bg-red-500 group-hover:bg-opacity-20 group-focus-visible:bg-red-500`}
         >
           <LikeIcon
-            className={`w-5 transition-colors duration-75 ${
+            className={`w-4 transition-colors duration-75 lg:w-5 ${
               likedByMe
                 ? `fill-red-500`
                 : ` group-hover:text-red-500 group-focus-visible:fill-red-500`
             }`}
           />
         </div>
-        <span className="ml-2">{likeCount}</span>
+        <span className="text ml-2 text-sm lg:text-base">{likeCount}</span>
       </button>
     </div>
   );

@@ -22,7 +22,7 @@ const MasonryGrid = ({
 
   return (
     <div
-      className={`grid place-content-center place-items-center ${
+      className={`my-2 grid w-fit place-items-center ${
         mediaUrls.length % 2 === 0 ? "grid-cols-2" : "grid-cols-1"
       } grid-rows-${mediaUrls && mediaUrls.length > 2 ? 2 : 1} gap-1`}
     >
@@ -47,11 +47,11 @@ const MasonryGrid = ({
               `${
                 mediaUrls?.length === 1
                   ? `h-fit max-w-[800px]`
-                  : `h-full max-w-[15rem] lg:max-w-[15rem] xl:max-w-[20rem]`
+                  : `h-full w-fit min-w-fit max-w-[10rem] md:max-w-[15rem] lg:max-w-[15rem] xl:max-w-[15rem] 2xl:max-w-[20rem]`
               }` +
               `${
                 mediaUrls.length === 3 && index !== 1
-                  ? "max-w-[15rem] lg:max-w-[20rem] xl:max-w-[24rem] "
+                  ? " max-w-[10rem] md:max-w-[15rem] lg:max-w-[15rem] xl:max-w-[15rem] 2xl:max-w-[20rem] "
                   : ""
               }`
             }
@@ -73,7 +73,7 @@ const MasonryGrid = ({
               removeWrapper
               src={imageUrl}
               alt={`Image ${index}`}
-              className="my-2 h-full w-fit object-cover"
+              className="h-full w-fit object-cover"
               shadow="none"
             />
           </div>

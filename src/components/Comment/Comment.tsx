@@ -22,16 +22,16 @@ type CommentProps = {
 
 const Comment = ({ createdAt, author, content, mediaUrls }: CommentProps) => {
   return (
-    <div className="border-b p-4">
+    <div className="border-b  px-2 py-4 lg:px-6">
       <div className={`flex cursor-default`}>
-        <div className="z-10 flex h-full flex-col pr-4">
-          <Link href={`/${author.username}`}>
+        <div className="z-10 flex h-full flex-col pr-[10px] md:pr-3 lg:pr-4">
+          <Link href={`/user/${author.username}`}>
             <Avatar src={author.image ?? ""} />
           </Link>
         </div>
         <div className="flex flex-grow flex-col">
           <div className="flex flex-row gap-1">
-            <Link href={`/${author.username}`}>
+            <Link href={`/user/${author.username}`}>
               <span className="font-bold outline-none hover:underline">
                 {author.name}
               </span>
@@ -44,7 +44,7 @@ const Comment = ({ createdAt, author, content, mediaUrls }: CommentProps) => {
             onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
               e.stopPropagation()
             }
-            className="font-semibold text-blue-500 hover:underline"
+            className="text-base font-semibold text-violet-500 hover:underline md:text-lg"
             text={content}
           />
           <MasonryGrid
@@ -54,7 +54,7 @@ const Comment = ({ createdAt, author, content, mediaUrls }: CommentProps) => {
           />
         </div>
       </div>
-      <div className="ml-14 flex flex-row  justify-start gap-20 px-2 pt-3">
+      <div className="z-10 mx-2 ml-14 flex flex-row justify-start gap-6 md:gap-10 lg:gap-20">
         <LikeButton onClick={() => null} likedByMe={false} likeCount={0} />
         <CommentButton onClick={() => null} commentCount={0} />
         <EchoButton onClick={() => null} EchoCount={0} />

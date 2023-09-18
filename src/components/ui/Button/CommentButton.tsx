@@ -14,8 +14,8 @@ function CommentButton({ onClick, commentCount }: CommentButtonProps) {
   if (session.status !== "authenticated") {
     return (
       <div className="m-1 flex items-center gap-3 self-start text-gray-500">
-        <ChatBubbleLeftIcon className="w-5" />
-        <span>{commentCount}</span>
+        <ChatBubbleLeftIcon className="w-4 lg:w-5" />
+        <span className="text ml-2 text-sm lg:text-base">{commentCount}</span>
       </div>
     );
   }
@@ -31,10 +31,10 @@ function CommentButton({ onClick, commentCount }: CommentButtonProps) {
           className={`group-hover-bg-blue-500 rounded-full p-2 outline-blue-500 transition-colors duration-100 focus-visible:bg-blue-500 group-hover:bg-blue-500 group-hover:bg-opacity-20 group-focus-visible:bg-blue-500`}
         >
           <ChatBubbleLeftIcon
-            className={`w-5 transition-colors duration-75 group-hover:text-blue-500 group-focus-visible:fill-blue-500`}
+            className={`w-4 transition-colors duration-75 group-hover:text-blue-500 group-focus-visible:fill-blue-500 lg:w-5`}
           />
         </div>
-        <span className="ml-2">{commentCount}</span>
+        <span className="text ml-2 text-sm lg:text-base">{commentCount}</span>
       </button>
     </div>
   );

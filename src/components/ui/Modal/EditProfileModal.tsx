@@ -25,7 +25,8 @@ type WelcomeModalProps = {
   username?: string | null;
   bio?: string;
   email?: string | null;
-  isOpen: boolean;
+  isOpen?: boolean;
+  activity: string;
 };
 
 const WelcomeModal = ({
@@ -37,6 +38,7 @@ const WelcomeModal = ({
   bio,
   email,
   isOpen,
+  activity,
 }: WelcomeModalProps) => {
   const router = useRouter();
   const { onOpenChange } = useDisclosure();
@@ -50,38 +52,6 @@ const WelcomeModal = ({
     bio: bio,
   });
   const updateUser = api.user.updateUser.useMutation();
-
-  const handleImageInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return; // No files selected
-
-    const file = files[0]; // Get the first selected file
-
-    if (!file) return; // Ensure that a file exists
-
-    const encodedImage = await encodeImageToBase64(file);
-    setProfileData({
-      ...profileData,
-      banner: encodedImage,
-    });
-  };
-
-  const encodeImageToBase64 = (file: File) => {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (typeof e.target?.result === "string") {
-          resolve(e.target.result);
-        } else {
-          reject(new Error("Failed to read image as base64."));
-        }
-      };
-      reader.onerror = (error) => {
-        reject(error);
-      };
-      reader.readAsDataURL(file);
-    });
-  };
 
   function handleUpdateProfile(e: FormEvent) {
     e.preventDefault();
@@ -104,21 +74,21 @@ const WelcomeModal = ({
       onOpenChange={onOpenChange}
     >
       <ModalContent>
-        {() => (
+        {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Complete your profile!
+              {activity} your profile!
             </ModalHeader>
             <ModalBody>
               <div className="border-b">
                 <form onSubmit={handleUpdateProfile}>
-                  <div className="banner h-64 w-full">
+                  <div className="banner h-32 w-full md:h-64">
                     {profileData.banner ? (
                       <Image
                         removeWrapper
                         src={profileData.banner ?? ""}
                         alt="profile banner"
-                        className="aspect-video h-full w-full object-fill"
+                        className="aspect-video object-fill md:h-full md:w-full"
                         radius="none"
                       />
                     ) : (
@@ -130,9 +100,6 @@ const WelcomeModal = ({
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={(e) => {
-                              void handleImageInput(e);
-                            }}
                           />
                           <CameraIcon
                             className="cursor-pointer rounded-full p-4 group-hover:bg-white group-hover:bg-opacity-20"
@@ -144,7 +111,7 @@ const WelcomeModal = ({
                   </div>
                   <div className="mx-6 flex flex-row justify-between">
                     <Avatar
-                      className="-mt-16  h-32 w-32"
+                      className="-mt-8 h-16  w-16 md:-mt-16 md:h-32 md:w-32"
                       isBordered
                       src={image ?? profileFallback}
                     />
@@ -196,12 +163,19 @@ const WelcomeModal = ({
                     </div>
                     <div className="flex justify-end pt-2">
                       <Button
-                        className="bg-violet-500 font-semibold"
+                        className="m-1 bg-violet-500 font-semibold"
                         type="submit"
                         onClick={handleUpdateProfile}
                       >
                         Update Profile
                       </Button>
+                      {/* <Button
+                        className="m-1 font-semibold"
+                        type="button"
+                        onClick={onClose}
+                      >
+                        Close
+                      </Button> */}
                     </div>
                   </div>
                 </form>

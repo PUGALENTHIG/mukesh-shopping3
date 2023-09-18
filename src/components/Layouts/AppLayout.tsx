@@ -3,11 +3,12 @@ import { useSession } from "next-auth/react";
 
 import LeftSidebar from "@/components/Sidebar/LeftSidebar";
 import RightSidebar from "../Sidebar/RightSidebar";
-import WelcomeModal from "@/components/ui/Modal/WelcomeModal";
+import EditProfileModal from "@/components/ui/Modal/EditProfileModal";
 
 const AppLayout = ({ children }: PropsWithChildren) => {
   const session = useSession();
-  const [welcomeModal, setWelcomeModal] = React.useState<boolean>(false);
+  const [editProfileModal, setEditProfileModal] =
+    React.useState<boolean>(false);
   const user = session.data?.user;
 
   React.useEffect(() => {
@@ -19,7 +20,7 @@ const AppLayout = ({ children }: PropsWithChildren) => {
       user?.name === undefined;
 
     if (hasMissingInfo) {
-      setWelcomeModal(true);
+      setEditProfileModal(true);
     }
   }, [session.status, user]);
 
@@ -27,7 +28,13 @@ const AppLayout = ({ children }: PropsWithChildren) => {
     <div className="container mx-auto flex flex-row items-start">
       <LeftSidebar />
       <div className="min-h-screen max-w-[100vw] flex-grow border-x">
-        {welcomeModal && <WelcomeModal {...user} isOpen={welcomeModal} />}
+        {editProfileModal && (
+          <EditProfileModal
+            activity="complete"
+            {...user}
+            isOpen={editProfileModal}
+          />
+        )}
         {children}
       </div>
       <RightSidebar />

@@ -17,6 +17,7 @@ function EchoButton({ onClick, EchoCount }: EchoButtonProps) {
             xmlns="http://www.w3.org/2000/svg"
             data-name="Layer 1"
             viewBox="10 10 75 75"
+            className={`flex w-4 items-center justify-center fill-gray-500 transition-colors duration-75 group-hover:fill-green-500 group-focus-visible:fill-green-500 lg:w-5`}
           >
             <path d="M71,18h0a4,4,0,0,0-3.46,5.92,55.67,55.67,0,0,1,0,52.15A4,4,0,0,0,71,82h0a4,4,0,0,0,3.52-2.07,63.41,63.41,0,0,0,0-59.87A4,4,0,0,0,71,18Z" />
             <path d="M34.23,23.73A4,4,0,0,0,28,27v0a4.1,4.1,0,0,0,1.82,3.32,23.93,23.93,0,0,1,0,39.17A4.1,4.1,0,0,0,28,72.91v0a4,4,0,0,0,6.23,3.32,31.93,31.93,0,0,0,0-52.53Z" />
@@ -24,7 +25,7 @@ function EchoButton({ onClick, EchoCount }: EchoButtonProps) {
             <path d="M25.68,38.15a4,4,0,0,0-6.68,3v0a3.89,3.89,0,0,0,1.3,2.92,7.9,7.9,0,0,1,0,11.89A3.89,3.89,0,0,0,19,58.86v0a4,4,0,0,0,6.68,3,15.86,15.86,0,0,0,0-23.7Z" />
           </svg>
         </div>
-        <span>{EchoCount}</span>
+        <span className="text ml-2 text-sm lg:text-base">{EchoCount}</span>
       </div>
     );
   }
@@ -43,7 +44,7 @@ function EchoButton({ onClick, EchoCount }: EchoButtonProps) {
             xmlns="http://www.w3.org/2000/svg"
             data-name="Layer 1"
             viewBox="10 10 75 75"
-            className={`flex h-5 w-5 items-center justify-center fill-gray-500 transition-colors duration-75 group-hover:fill-green-500 group-focus-visible:fill-green-500`}
+            className={`flex w-4 items-center justify-center fill-gray-500 transition-colors duration-75 group-hover:fill-green-500 group-focus-visible:fill-green-500 lg:w-5`}
           >
             <path d="M71,18h0a4,4,0,0,0-3.46,5.92,55.67,55.67,0,0,1,0,52.15A4,4,0,0,0,71,82h0a4,4,0,0,0,3.52-2.07,63.41,63.41,0,0,0,0-59.87A4,4,0,0,0,71,18Z" />
             <path d="M34.23,23.73A4,4,0,0,0,28,27v0a4.1,4.1,0,0,0,1.82,3.32,23.93,23.93,0,0,1,0,39.17A4.1,4.1,0,0,0,28,72.91v0a4,4,0,0,0,6.23,3.32,31.93,31.93,0,0,0,0-52.53Z" />
@@ -51,7 +52,7 @@ function EchoButton({ onClick, EchoCount }: EchoButtonProps) {
             <path d="M25.68,38.15a4,4,0,0,0-6.68,3v0a3.89,3.89,0,0,0,1.3,2.92,7.9,7.9,0,0,1,0,11.89A3.89,3.89,0,0,0,19,58.86v0a4,4,0,0,0,6.68,3,15.86,15.86,0,0,0,0-23.7Z" />
           </svg>
         </div>
-        <span className="ml-2">{EchoCount}</span>
+        <span className="text ml-2 text-sm lg:text-base">{EchoCount}</span>
       </button>
     </div>
   );

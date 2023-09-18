@@ -3,6 +3,8 @@ import { api } from "@/utils/api";
 import { Avatar, Button, Image, Skeleton } from "@nextui-org/react";
 import pluralize from "@/utils/pluralize";
 import { useSession } from "next-auth/react";
+import FollowButton from "../ui/Button/FollowButton";
+import EditProfileModal from "@/components/ui/Modal/EditProfileModal";
 
 type ProfileProps = {
   id: string;
@@ -27,6 +29,15 @@ const ProfileCard = ({
   followersCount,
   isFollowing,
 }: ProfileProps) => {
+  const session = useSession();
+  const [user, setUser] = React.useState({ ...session.data?.user });
+
+  React.useEffect(() => {
+    setUser({ ...session.data?.user });
+  }, [session]);
+
+  const [openEditModal, setOpenEditModal] = React.useState(false);
+
   const trpcUtils = api.useContext();
   const toggleFollow = api.user.toggleFollow.useMutation({
     onSuccess: ({ addedFollow }) => {
@@ -73,6 +84,13 @@ const ProfileCard = ({
             toggleFollow.mutate({ userId: id, username: username })
           }
         />
+        {/* {user?.id === id && session.status === "authenticated" ? (
+          <Button className="mt-2" onClick={() => setOpenEditModal(true)}>
+            Edit Profile
+          </Button>
+        ) : (
+          ""
+        )} */}
       </div>
       <div className="mx-6 my-4">
         {name ? (
@@ -107,39 +125,11 @@ const ProfileCard = ({
             </span>
           </div>
         </div>
+
+        <EditProfileModal {...user} activity="update" isOpen={openEditModal} />
       </div>
     </div>
   );
 };
-
-function FollowButton({
-  userId,
-  isFollowing,
-  isLoading,
-  onClick,
-}: {
-  userId: string;
-  isFollowing: boolean;
-  isLoading: boolean;
-  onClick: () => void;
-}) {
-  const session = useSession();
-
-  if (session.status !== "authenticated" || session.data?.user.id === userId)
-    return null;
-
-  return (
-    <Button
-      disabled={isLoading}
-      spinner={isLoading}
-      onClick={onClick}
-      radius="full"
-      size="lg"
-      className={`mt-4`}
-    >
-      {isFollowing ? "Unfollow" : "Follow"}
-    </Button>
-  );
-}
 
 export default ProfileCard;
