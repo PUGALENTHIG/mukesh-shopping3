@@ -25,7 +25,7 @@ interface User {
 const UserCard = ({ user }: { user: User }) => {
   return (
     <Dropdown>
-      <Card shadow="sm" className="elevation-1 flex px-1">
+      <Card shadow="sm" className="dark:elevation-1 flex px-1">
         <CardHeader className="justify-between">
           <div className="flex gap-5">
             <Avatar radius="full" size="md" src={user.image ?? ""} />

@@ -21,19 +21,8 @@ const LeftSidebar = () => {
   const session = useSession();
   const user = session.data?.user;
   const { resolvedTheme } = useTheme();
-  let LogoSrc;
 
-  switch (resolvedTheme) {
-    case "light":
-      LogoSrc = Logo;
-      break;
-    case "dark":
-      LogoSrc = LogoWhite;
-      break;
-    default:
-      LogoSrc = LogoWhite;
-      break;
-  }
+  const LogoSrc = resolvedTheme === "dark" ? LogoWhite : Logo;
 
   const SidebarButtons = [
     { text: "Home", icon: <HomeIcon />, link: "/" },

@@ -23,19 +23,7 @@ const TopNavbar = ({ setTab, nav }: TopNavbarProps) => {
   const session = useSession();
   const user = session.data?.user;
 
-  let LogoSrc;
-
-  switch (resolvedTheme) {
-    case "light":
-      LogoSrc = Logo;
-      break;
-    case "dark":
-      LogoSrc = LogoWhite;
-      break;
-    default:
-      LogoSrc = LogoWhite;
-      break;
-  }
+  const LogoSrc = resolvedTheme === "dark" ? LogoWhite : Logo;
 
   const [prevScrollPos, setPrevScrollPos] = React.useState(0);
   const [visible, setVisible] = React.useState(true);

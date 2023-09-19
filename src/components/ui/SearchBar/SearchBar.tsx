@@ -22,7 +22,7 @@ const SearchBar = () => {
           placeholder="Search..."
           variant="bordered"
           color="primary"
-          className="elevation-1 ml-4 rounded-md"
+          className="dark:elevation-1 ml-4 rounded-md"
           type="search"
           autoComplete="off"
           startContent={<MagnifyingGlassIcon width={20} />}

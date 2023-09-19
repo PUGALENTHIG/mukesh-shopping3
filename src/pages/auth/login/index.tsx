@@ -37,7 +37,7 @@ const Login: NextPage = ({}: InferGetServerSidePropsType<
 
   return (
     <section className="flex h-full w-full justify-center">
-      <div className="elevation-1 m-auto mx-auto w-full max-w-sm rounded-lg border p-6 shadow-lg">
+      <div className="dark:elevation-1 m-auto mx-auto w-full max-w-sm rounded-lg border p-6 shadow-lg">
         <div className="container mx-auto flex items-center justify-center pt-4">
           <Image alt="branding" src={LogoWhite} width={40} height={40} />
         </div>

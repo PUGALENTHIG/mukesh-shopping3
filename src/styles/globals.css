@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 * {
-  border-color: #2f3333;
+  border-color: #afaeae;
   font-size: 18px;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   * {
-    border-color: #afaeae;
+    border-color: #2f3333;
   }
 }
 

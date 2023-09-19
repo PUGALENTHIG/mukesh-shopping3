@@ -23,19 +23,7 @@ const RegisterForm = () => {
   const [loading] = React.useState<boolean>(false);
 
   const { resolvedTheme } = useTheme();
-  let LogoSrc;
-
-  switch (resolvedTheme) {
-    case "light":
-      LogoSrc = Logo;
-      break;
-    case "dark":
-      LogoSrc = LogoWhite;
-      break;
-    default:
-      LogoSrc = LogoWhite;
-      break;
-  }
+  const LogoSrc = resolvedTheme === "dark" ? LogoWhite : Logo;
 
   const registerUser = api.auth.register.useMutation({
     onError: (e) => setError(e.message),
