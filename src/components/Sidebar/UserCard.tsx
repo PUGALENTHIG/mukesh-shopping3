@@ -29,11 +29,11 @@ const UserCard = ({ user }: { user: User }) => {
         <CardHeader className="justify-between">
           <div className="flex gap-5">
             <Avatar radius="full" size="md" src={user.image ?? ""} />
-            <div className="flex flex-col items-start justify-center gap-1">
-              <h4 className="overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold leading-none text-default-600">
+            <div className="flex max-w-[6rem] flex-col items-start justify-center gap-1">
+              <h4 className="max-w-[120px] overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold leading-none text-default-600">
                 {user.name}
               </h4>
-              <h5 className="overflow-hidden text-ellipsis whitespace-nowrap text-small tracking-tight text-default-400">
+              <h5 className="max-w-[120px] overflow-hidden text-ellipsis whitespace-nowrap text-small tracking-tight text-default-400">
                 {`@${user.username}` ?? "username"}
               </h5>
             </div>

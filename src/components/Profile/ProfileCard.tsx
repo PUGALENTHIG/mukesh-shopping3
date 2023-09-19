@@ -1,6 +1,12 @@
 import React from "react";
 import { api } from "@/utils/api";
-import { Avatar, Button, Image, Skeleton } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  Image,
+  Skeleton,
+  useDisclosure,
+} from "@nextui-org/react";
 import pluralize from "@/utils/pluralize";
 import { useSession } from "next-auth/react";
 import FollowButton from "../ui/Button/FollowButton";
@@ -30,8 +36,9 @@ const ProfileCard = ({
   isFollowing,
 }: ProfileProps) => {
   const session = useSession();
+  const user = session.data?.user;
 
-  const [openEditModal, setOpenEditModal] = React.useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const trpcUtils = api.useContext();
   const toggleFollow = api.user.toggleFollow.useMutation({
@@ -79,13 +86,13 @@ const ProfileCard = ({
             toggleFollow.mutate({ userId: id, username: username })
           }
         />
-        {/* {user?.id === id && session.status === "authenticated" ? (
-          <Button className="mt-2" onClick={() => setOpenEditModal(true)}>
+        {user?.id === id && session.status === "authenticated" ? (
+          <Button className="mt-2" onClick={onOpen}>
             Edit Profile
           </Button>
         ) : (
           ""
-        )} */}
+        )}
       </div>
       <div className="mx-6 my-4">
         {name ? (
@@ -121,7 +128,14 @@ const ProfileCard = ({
           </div>
         </div>
 
-        {/* <EditProfileModal {...user} activity="update" isOpen={openEditModal} /> */}
+        <EditProfileModal
+          {...user}
+          bio={bio}
+          activity="update"
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onOpenChange={onOpenChange}
+        />
       </div>
     </div>
   );

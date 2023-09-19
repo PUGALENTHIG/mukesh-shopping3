@@ -4,11 +4,11 @@ import { useSession } from "next-auth/react";
 import LeftSidebar from "@/components/Sidebar/LeftSidebar";
 import RightSidebar from "../Sidebar/RightSidebar";
 import EditProfileModal from "@/components/ui/Modal/EditProfileModal";
+import { useDisclosure } from "@nextui-org/react";
 
 const AppLayout = ({ children }: PropsWithChildren) => {
   const session = useSession();
-  const [editProfileModal, setEditProfileModal] =
-    React.useState<boolean>(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const user = session.data?.user;
 
   React.useEffect(() => {
@@ -20,21 +20,22 @@ const AppLayout = ({ children }: PropsWithChildren) => {
       user?.name === undefined;
 
     if (hasMissingInfo) {
-      setEditProfileModal(true);
+      onOpen();
     }
-  }, [session.status, user]);
+  }, [session.status, user, onOpen]);
 
   return (
     <div className="container mx-auto flex flex-row items-start">
       <LeftSidebar />
       <div className="min-h-screen max-w-[100vw] flex-grow border-x">
-        {editProfileModal && (
-          <EditProfileModal
-            activity="complete"
-            {...user}
-            isOpen={editProfileModal}
-          />
-        )}
+        <EditProfileModal
+          activity="complete"
+          {...user}
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onOpenChange={onOpenChange}
+        />
+
         {children}
       </div>
       <RightSidebar />

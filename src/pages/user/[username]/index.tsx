@@ -56,7 +56,11 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   return (
     <>
       <Head>
-        <title>@{profileData.username} - Echo</title>
+        <title>
+          {profileData.username
+            ? `@` + profileData.username + " - Echo"
+            : "Echo"}
+        </title>
       </Head>
       <nav className="sticky top-0 z-50 flex w-full border-y backdrop-blur-xl">
         <Link href="..">

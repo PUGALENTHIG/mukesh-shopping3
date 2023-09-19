@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
       session.user.username = token.username as string; */
       return session;
     },
-    jwt({ token, account, user }) {
+    /*    jwt({ token, account, user }) {
       if (account) {
         token.accessToken = account.access_token;
         token.id = user.id;
@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
         console.log({ user });
       }
       return token;
-    },
+    }, */
   },
   secret: env.NEXTAUTH_SECRET,
   pages: {

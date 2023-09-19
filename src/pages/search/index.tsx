@@ -17,7 +17,7 @@ const SearchResult = () => {
   return (
     <div>
       <Head>
-        <title>@{term} - Echo</title>
+        <title>{term ? term + ` - Echo` : "Echo"}</title>
       </Head>
       <nav className="sticky top-0 z-50 flex w-full flex-row items-center border-y backdrop-blur-xl">
         <Link href="..">

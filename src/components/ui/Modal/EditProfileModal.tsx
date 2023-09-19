@@ -9,7 +9,6 @@ import {
   Avatar,
   Input,
   Textarea,
-  useDisclosure,
 } from "@nextui-org/react";
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { api } from "@/utils/api";
@@ -17,15 +16,17 @@ import { useRouter } from "next/router";
 
 const profileFallback = "./default-profile.jpg";
 
-type WelcomeModalProps = {
+type EditProfileModalProps = {
   id?: string | undefined;
   banner?: string;
   image?: string | null;
   name?: string | null;
   username?: string | null;
-  bio?: string;
+  bio?: string | null;
   email?: string | null;
   isOpen?: boolean;
+  onOpen: () => void;
+  onOpenChange: () => void;
   activity: string;
 };
 
@@ -38,10 +39,10 @@ const WelcomeModal = ({
   bio,
   email,
   isOpen,
+  onOpenChange,
   activity,
-}: WelcomeModalProps) => {
+}: EditProfileModalProps) => {
   const router = useRouter();
-  const { onOpenChange } = useDisclosure();
   const [profileData, setProfileData] = React.useState({
     id: id,
     banner: banner ?? "",
@@ -49,8 +50,21 @@ const WelcomeModal = ({
     email: email ?? "",
     name: name ?? "",
     username: username ?? "",
-    bio: bio,
+    bio: bio ?? "",
   });
+
+  React.useEffect(() => {
+    setProfileData({
+      id: id,
+      banner: banner ?? "",
+      image: image ?? "",
+      email: email ?? "",
+      name: name ?? "",
+      username: username ?? "",
+      bio: bio ?? "",
+    });
+  }, [banner, bio, email, id, image, name, username]);
+
   const updateUser = api.user.updateUser.useMutation();
 
   function handleUpdateProfile(e: FormEvent) {
@@ -66,21 +80,22 @@ const WelcomeModal = ({
   return (
     <Modal
       backdrop="blur"
-      isDismissable={false}
-      isKeyboardDismissDisabled={true}
+      isDismissable={activity === "update" ? true : false}
+      isKeyboardDismissDisabled={activity === "update" ? false : true}
+      hideCloseButton={activity === "update" ? false : true}
       className="z-50"
       size="3xl"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
     >
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">
               {activity} your profile!
             </ModalHeader>
             <ModalBody>
-              <div className="border-b">
+              <div className="">
                 <form onSubmit={handleUpdateProfile}>
                   <div className="banner h-32 w-full md:h-64">
                     {profileData.banner ? (
