@@ -5,7 +5,6 @@ import {
   ModalHeader,
   ModalBody,
   Button,
-  Image,
   Avatar,
   Input,
   Textarea,
@@ -15,13 +14,12 @@ import { CameraIcon } from "@heroicons/react/24/outline";
 import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import { UploadButton } from "@/utils/uploadthing";
-import { url } from "inspector";
 const profileFallback = "./default-profile.jpg";
 
 type EditProfileModalProps = {
   id?: string | undefined;
-  banner?: string | undefined;
-  image?: string | undefined;
+  banner?: string | undefined | null;
+  image?: string | undefined | null;
   name?: string | null;
   username?: string | null;
   bio?: string | null;
@@ -249,13 +247,6 @@ const WelcomeModal = ({
                       >
                         Update Profile
                       </Button>
-                      {/* <Button
-                        className="m-1 font-semibold"
-                        type="button"
-                        onClick={onClose}
-                      >
-                        Close
-                      </Button> */}
                     </div>
                   </div>
                 </form>

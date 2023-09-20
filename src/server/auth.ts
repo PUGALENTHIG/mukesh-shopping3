@@ -5,23 +5,23 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import { loginSchema } from "@/validation/auth";
+/* import { loginSchema } from "@/validation/auth"; */
 
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
+/* import CredentialsProvider from "next-auth/providers/credentials"; */
 
-import argon2 from "argon2";
+/* import argon2 from "argon2"; */
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
-import { type User } from "@prisma/client";
+/* import { type User } from "@prisma/client"; */
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
       username: string | null;
-      banner: string | null;
+      banner: string | undefined | null;
       // ...other properties
       // role: UserRole;
     };

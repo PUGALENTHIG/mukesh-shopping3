@@ -6,7 +6,6 @@ import {
   HomeIcon,
   MagnifyingGlassIcon,
   UserIcon,
-  EnvelopeIcon,
   ArrowLeftOnRectangleIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
@@ -18,7 +17,7 @@ type BottomNavbarProps = {
   setNav: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const BottomNavbar = ({ nav, setNav }: BottomNavbarProps) => {
+export const BottomNavbar = ({ /* nav, */ setNav }: BottomNavbarProps) => {
   const router = useRouter();
   const session = useSession();
   const user = session.data?.user;

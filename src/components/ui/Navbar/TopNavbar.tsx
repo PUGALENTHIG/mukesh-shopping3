@@ -1,9 +1,7 @@
-import { ThemeSwitcher } from "@/components/ThemeSwitcher";
-import { ArrowLeftOnRectangleIcon, UserIcon } from "@heroicons/react/24/solid";
 import { Avatar } from "@nextui-org/react";
 import Image from "next/image";
 import * as Tabs from "@radix-ui/react-tabs";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import React from "react";
