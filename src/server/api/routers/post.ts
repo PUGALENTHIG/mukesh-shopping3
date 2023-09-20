@@ -236,7 +236,8 @@ async function getSearchedPost({
   const data = await ctx.prisma.post.findMany({
     where: {
       content: {
-        contains: searchTerm,
+        contains: searchTerm?.toLowerCase(),
+        mode: "insensitive",
       },
     },
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],

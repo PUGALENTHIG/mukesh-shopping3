@@ -23,7 +23,19 @@ const TopNavbar = ({ setTab, nav }: TopNavbarProps) => {
   const session = useSession();
   const user = session.data?.user;
 
-  const LogoSrc = resolvedTheme === "dark" ? LogoWhite : Logo;
+  let src;
+
+  switch (resolvedTheme) {
+    case "dark":
+      src = LogoWhite;
+      break;
+    case "light":
+      src = Logo;
+      break;
+    default:
+      src = LogoWhite;
+      break;
+  }
 
   const [prevScrollPos, setPrevScrollPos] = React.useState(0);
   const [visible, setVisible] = React.useState(true);
@@ -65,7 +77,7 @@ const TopNavbar = ({ setTab, nav }: TopNavbarProps) => {
             <SearchBar />
           ) : (
             <Link href="/">
-              <Image alt="branding" src={LogoSrc} width={30} />
+              <Image alt="branding" src={src} width={30} />
             </Link>
           )}
         </div>

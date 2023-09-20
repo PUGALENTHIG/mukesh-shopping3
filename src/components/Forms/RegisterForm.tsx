@@ -23,7 +23,19 @@ const RegisterForm = () => {
   const [loading] = React.useState<boolean>(false);
 
   const { resolvedTheme } = useTheme();
-  const LogoSrc = resolvedTheme === "dark" ? LogoWhite : Logo;
+  let src;
+
+  switch (resolvedTheme) {
+    case "dark":
+      src = LogoWhite;
+      break;
+    case "light":
+      src = Logo;
+      break;
+    default:
+      src = LogoWhite;
+      break;
+  }
 
   const registerUser = api.auth.register.useMutation({
     onError: (e) => setError(e.message),
@@ -39,7 +51,7 @@ const RegisterForm = () => {
     <div className="container mx-auto flex max-w-md items-center justify-center px-6">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="mx-auto flex justify-center">
-          <Image alt="branding" src={LogoSrc} width={40} height={40} />
+          <Image alt="branding" src={src} width={40} height={40} />
         </div>
         <div className=" mt-8 flex w-full flex-col items-center gap-4 ">
           <span className="absolute"></span>

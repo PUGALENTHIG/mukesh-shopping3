@@ -9,17 +9,19 @@ import {
   Avatar,
   Input,
   Textarea,
+  Spinner,
 } from "@nextui-org/react";
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { api } from "@/utils/api";
 import { useRouter } from "next/router";
-
+import { UploadButton } from "@/utils/uploadthing";
+import { url } from "inspector";
 const profileFallback = "./default-profile.jpg";
 
 type EditProfileModalProps = {
   id?: string | undefined;
-  banner?: string;
-  image?: string | null;
+  banner?: string | undefined;
+  image?: string | undefined;
   name?: string | null;
   username?: string | null;
   bio?: string | null;
@@ -43,6 +45,7 @@ const WelcomeModal = ({
   activity,
 }: EditProfileModalProps) => {
   const router = useRouter();
+
   const [profileData, setProfileData] = React.useState({
     id: id,
     banner: banner ?? "",
@@ -52,6 +55,8 @@ const WelcomeModal = ({
     username: username ?? "",
     bio: bio ?? "",
   });
+  const [avatarIsLoading, setAvatarIsLoading] = React.useState<boolean>(false);
+  const [bannerIsLoading, setBannerIsLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setProfileData({
@@ -98,38 +103,98 @@ const WelcomeModal = ({
               <div className="">
                 <form onSubmit={handleUpdateProfile}>
                   <div className="banner h-32 w-full md:h-64">
-                    {profileData.banner ? (
-                      <Image
-                        removeWrapper
-                        src={profileData.banner ?? ""}
-                        alt="profile banner"
-                        className="aspect-video object-fill md:h-full md:w-full"
-                        radius="none"
-                      />
-                    ) : (
-                      <div className="fallback group flex h-full w-full cursor-pointer items-center justify-center bg-gray-600 transition-colors hover:bg-gray-800">
-                        <label htmlFor="bannerUpload">
-                          <input
-                            aria-label="add image"
-                            id="bannerUpload"
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                          />
+                    <div
+                      style={{
+                        backgroundImage: `url(${profileData.banner})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                      }}
+                      className="fallback flex h-full w-full items-center justify-center bg-background bg-opacity-50 bg-blend-overlay transition-colors"
+                    >
+                      <label htmlFor="bannerUpload">
+                        <UploadButton
+                          aria-label="add banner"
+                          className="hidden"
+                          endpoint="bannerImage"
+                          onClientUploadComplete={(res) => {
+                            // Do something with the response
+                            console.log("Files: ", res?.[0]?.url);
+                            setBannerIsLoading(false);
+                            setProfileData({
+                              ...profileData,
+                              banner: res?.[0]?.url ?? "",
+                            });
+                            alert("Upload Completed");
+                          }}
+                          onUploadError={(error: Error) => {
+                            // Do something with the error.
+                            alert(`ERROR! ${error.message}`);
+                          }}
+                          onUploadBegin={
+                            (/* name */) => {
+                              // Do something once upload begins
+                              setBannerIsLoading(true);
+                              /* console.log("Uploading: ", name); */
+                            }
+                          }
+                        />
+                        {!bannerIsLoading ? (
                           <CameraIcon
-                            className="cursor-pointer rounded-full p-4 group-hover:bg-white group-hover:bg-opacity-20"
+                            className="cursor-pointer rounded-full p-2 hover:bg-background hover:bg-opacity-20"
                             width={64}
                           />
-                        </label>
-                      </div>
-                    )}
+                        ) : (
+                          <Spinner />
+                        )}
+                      </label>
+                    </div>
                   </div>
-                  <div className="mx-6 flex flex-row justify-between">
-                    <Avatar
-                      className="-mt-8 h-16  w-16 md:-mt-16 md:h-32 md:w-32"
-                      isBordered
-                      src={image ?? profileFallback}
-                    />
+                  <div className="relative mx-6 flex flex-row ">
+                    <label>
+                      <UploadButton
+                        aria-label="add profile picture"
+                        className="hidden h-fit"
+                        endpoint="profilePicture"
+                        onClientUploadComplete={(res) => {
+                          // Do something with the response
+                          console.log("Files: ", res?.[0]?.url);
+                          setAvatarIsLoading(false);
+                          setProfileData({
+                            ...profileData,
+                            image: res?.[0]?.url ?? "",
+                          });
+                          alert("Upload Completed");
+                        }}
+                        onUploadError={(error: Error) => {
+                          // Do something with the error.
+                          alert(`ERROR! ${error.message}`);
+                        }}
+                        onUploadBegin={
+                          (/* name */) => {
+                            // Do something once upload begins
+                            setAvatarIsLoading(true);
+                            /* console.log("Uploading: ", name); */
+                          }
+                        }
+                      />
+
+                      <div className="group -mt-8 h-16 w-16 md:-mt-16 md:h-32 md:w-32">
+                        {!avatarIsLoading ? (
+                          <CameraIcon
+                            width={16}
+                            className="bg-dark absolute z-20 h-16 w-16 cursor-pointer rounded-full bg-background bg-opacity-40 p-5 group-hover:bg-opacity-70 md:h-32 md:w-32 md:p-10"
+                          />
+                        ) : (
+                          <Spinner className="absolute z-20 h-16 w-16 rounded-full bg-background bg-opacity-80 p-5 md:h-32 md:w-32  md:p-10" />
+                        )}
+
+                        <Avatar
+                          className="h-full w-full"
+                          isBordered
+                          src={profileData.image ?? profileFallback}
+                        />
+                      </div>
+                    </label>
                   </div>
                   <div className="mx-6 my-4">
                     <div className="pfp pb-3 text-xl font-bold">

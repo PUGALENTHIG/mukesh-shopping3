@@ -22,7 +22,19 @@ const LeftSidebar = () => {
   const user = session.data?.user;
   const { resolvedTheme } = useTheme();
 
-  const LogoSrc = resolvedTheme === "dark" ? LogoWhite : Logo;
+  let src;
+
+  switch (resolvedTheme) {
+    case "dark":
+      src = LogoWhite;
+      break;
+    case "light":
+      src = Logo;
+      break;
+    default:
+      src = LogoWhite;
+      break;
+  }
 
   const SidebarButtons = [
     { text: "Home", icon: <HomeIcon />, link: "/" },
@@ -45,7 +57,7 @@ const LeftSidebar = () => {
         items-center justify-center pl-8 xl:ml-4"
       >
         <Link href="/">
-          <Image alt="branding" src={LogoSrc} width={40} height={40} />
+          <Image alt="branding" src={src} width={40} height={40} />
         </Link>
       </div>
       <div className="my-8 flex flex-col space-y-6 xl:ml-4">
