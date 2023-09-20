@@ -28,7 +28,6 @@ What you can expect to see soon:
 
 *   Auth0 integrationn 
 *   Echo(repost) tweets
-*   CDN integration
 *   User search
 *   Recent Search history
 *   Better UX
@@ -38,9 +37,11 @@ What you can expect to see soon:
 
 Following limitations have been applied on the hosted webiste to avoid spam:
 
-*   Image upload restricted to 1MB
+*   Post image upload restricted to 1MB
+*   Profile picture upload restricted to 4MB
+*   Profile Banner upload restricted to 8MB
 *   Unverified Email auth commented out
-*   Video upload restricted
+*   Video upload restricted for the time being
 
 <h2>👨‍🚀 Getting Started</h2>
 
@@ -95,3 +96,4 @@ Technologies used in the project:
 *   Prisma
 *   Supabase
 *   TailwindCSS
+*   Uploadthing
