@@ -57,7 +57,7 @@ const Comment = ({ createdAt, author, content, mediaUrls }: CommentProps) => {
       <div className="z-10 mx-2 ml-14 flex flex-row justify-start gap-6 md:gap-10 lg:gap-20">
         <LikeButton onClick={() => null} likedByMe={false} likeCount={0} />
         <CommentButton onClick={() => null} commentCount={0} />
-        <EchoButton onClick={() => null} EchoCount={0} />
+        <EchoButton EchoCount={0} />
       </div>
     </div>
   );
