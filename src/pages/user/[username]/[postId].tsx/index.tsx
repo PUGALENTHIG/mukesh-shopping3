@@ -1,20 +1,22 @@
 import React from "react";
 import { useRouter } from "next/router";
-/* import { ssgHelper } from "@/server/api/ssgHelper"; */
+import { ssgHelper } from "@/server/api/ssgHelper";
 import { api } from "@/utils/api";
-/* import type {
+import type {
   GetStaticPaths,
   GetStaticPropsContext,
   InferGetStaticPropsType,
   NextPage,
-} from "next"; */
+} from "next";
 import { Button } from "@nextui-org/react";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import PostsList from "@/components/PostsList/PostsList";
 import Comment from "@/components/Comment/Comment";
 import CreateComment from "@/components/Post/CreateComment";
 
-const SinglePost = () => {
+const SinglePost: NextPage<
+  InferGetStaticPropsType<typeof getStaticProps>
+> = () => {
   const router = useRouter();
   const postId = router.query?.postId as string;
   const posts = api.post.singlePost.useInfiniteQuery({ postId: postId });
@@ -57,14 +59,14 @@ const SinglePost = () => {
   );
 };
 
-/* export const getStaticPaths: GetStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
     fallback: "blocking",
   };
-}; */
+};
 
-/* export async function getStaticProps(
+export async function getStaticProps(
   context: GetStaticPropsContext<{
     username: string;
     id: string | undefined;
@@ -89,6 +91,6 @@ const SinglePost = () => {
       postId,
     },
   };
-} */
+}
 
 export default SinglePost;

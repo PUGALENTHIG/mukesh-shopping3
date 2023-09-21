@@ -12,11 +12,10 @@ import { getServerAuthSession } from "@/server/common/get-server-auth-session";
 
 ("react-hook-form");
 import { signIn } from "next-auth/react";
-import Image from "next/image";
 import { Button, Input } from "@nextui-org/react";
 
-import LogoWhite from "/public/echo-white.png";
 import Link from "next/link";
+import Logo from "@/components/ui/Logo";
 
 const Login: NextPage = ({}: InferGetServerSidePropsType<
   typeof getServerSideProps
@@ -39,7 +38,7 @@ const Login: NextPage = ({}: InferGetServerSidePropsType<
     <section className="flex h-full w-full justify-center">
       <div className="dark:elevation-1 m-auto mx-auto w-full max-w-sm rounded-lg border p-6 shadow-lg">
         <div className="container mx-auto flex items-center justify-center pt-4">
-          <Image alt="branding" src={LogoWhite} width={40} height={40} />
+          <Logo />
         </div>
         <form onSubmit={handleSubmit} className="mt-6">
           <div>

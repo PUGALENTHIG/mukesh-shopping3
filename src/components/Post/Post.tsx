@@ -119,7 +119,7 @@ function Post({
 
   return (
     <>
-      <div onClick={() => handleClick()}>
+      <div onClick={handleClick}>
         <article
           className={`-z-10 flex flex-col border-b px-2 py-4 lg:px-6 ${
             clickable ? "cursor-pointer" : "cursor-default"
@@ -162,42 +162,34 @@ function Post({
                   text={content}
                 />
               </div>
-              <MasonryGrid
-                setMediaUrls={() => undefined}
-                mediaUrls={mediaUrls ?? []}
-                showClose={false}
-              />
+              <div
+                onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+                  e.stopPropagation();
+                }}
+              >
+                <MasonryGrid
+                  setMediaUrls={() => undefined}
+                  mediaUrls={mediaUrls ?? []}
+                  showClose={false}
+                />
+              </div>
             </div>
           </div>
 
-          <div className="z-10 mx-2 ml-14 flex flex-row justify-start gap-6 md:gap-10 lg:gap-20">
+          <div
+            onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+              e.stopPropagation();
+            }}
+            className="z-10 mx-2 ml-14 flex flex-row justify-start gap-6 md:gap-10 lg:gap-20"
+          >
             <LikeButton
-              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                e.stopPropagation();
-                handleToggleLike();
-              }}
+              onClick={handleToggleLike}
               likedByMe={likedByMe}
               likeCount={likeCount}
             />
-            <CommentButton
-              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                e.stopPropagation();
-                onOpen();
-              }}
-              commentCount={commentCount}
-            />
-            <EchoButton
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                e.stopPropagation();
-              }}
-              EchoCount={0}
-            />
-            <ShareButton
-              postUrl={postUrl}
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                e.stopPropagation()
-              }
-            />
+            <CommentButton onClick={onOpen} commentCount={commentCount} />
+            <EchoButton EchoCount={0} />
+            <ShareButton postUrl={postUrl} />
           </div>
         </article>
       </div>

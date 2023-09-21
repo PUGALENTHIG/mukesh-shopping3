@@ -4,7 +4,6 @@ import { useToast } from "@/components/ContextProviders/ToastContext";
 
 type ShareButtonProps = {
   postUrl: string;
-  onClick: unknown;
 };
 
 const ShareButton = ({ postUrl }: ShareButtonProps) => {

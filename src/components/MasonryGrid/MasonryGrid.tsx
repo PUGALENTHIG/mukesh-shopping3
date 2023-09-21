@@ -1,10 +1,13 @@
 import React from "react";
 import { Image } from "@nextui-org/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { Lightbox } from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 type MasonryProps = {
   mediaUrls: string[];
   setMediaUrls: (updatedMediaUrls: string[]) => void | undefined;
+
   showClose: boolean;
 };
 
@@ -18,6 +21,19 @@ const MasonryGrid = ({
       (_, index) => index !== indexToRemove,
     );
     setMediaUrls(updatedMediaUrls);
+  };
+
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
+  const lightboxImages = mediaUrls.map((imageUrl) => ({ src: imageUrl }));
+
+  const openLightbox = (index: React.SetStateAction<number>) => {
+    setSelectedImageIndex(index);
+    setIsOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -56,6 +72,7 @@ const MasonryGrid = ({
               }`
             }
             key={index}
+            onClick={() => openLightbox(index)}
           >
             {showClose && (
               <div className="flex justify-end">
@@ -69,6 +86,7 @@ const MasonryGrid = ({
                 </button>
               </div>
             )}
+
             <Image
               removeWrapper
               src={imageUrl}
@@ -79,6 +97,19 @@ const MasonryGrid = ({
           </div>
         );
       })}
+
+      {isOpen && (
+        <Lightbox
+          styles={{ root: { "--yarl__color_backdrop": "rgba(0, 0, 0, .7)" } }}
+          className="backdrop-blur-sm"
+          open={isOpen}
+          close={closeLightbox}
+          slides={lightboxImages}
+          controller={{ closeOnPullDown: true, closeOnBackdropClick: true }}
+          index={selectedImageIndex}
+          /* render={{ buttonNext: () => null, buttonPrev: () => null }} */
+        />
+      )}
     </div>
   );
 };

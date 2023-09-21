@@ -2,10 +2,8 @@ import React from "react";
 import { signIn, useSession } from "next-auth/react";
 
 import Link from "next/link";
-import Image from "next/image";
 
 import { Button } from "@nextui-org/react";
-import { useTheme } from "next-themes";
 import {
   HomeIcon,
   UserIcon,
@@ -13,28 +11,12 @@ import {
   EnvelopeIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
-import Logo from "/public/echo.png";
-import LogoWhite from "/public/echo-white.png";
 import UserCard from "./UserCard";
+import Logo from "../ui/Logo";
 
 const LeftSidebar = () => {
   const session = useSession();
   const user = session.data?.user;
-  const { resolvedTheme } = useTheme();
-
-  let src;
-
-  switch (resolvedTheme) {
-    case "dark":
-      src = LogoWhite;
-      break;
-    case "light":
-      src = Logo;
-      break;
-    default:
-      src = LogoWhite;
-      break;
-  }
 
   const SidebarButtons = [
     { text: "Home", icon: <HomeIcon />, link: "/" },
@@ -57,7 +39,7 @@ const LeftSidebar = () => {
         items-center justify-center pl-8 xl:ml-4"
       >
         <Link href="/">
-          <Image alt="branding" src={src} width={40} height={40} />
+          <Logo />
         </Link>
       </div>
       <div className="my-8 flex flex-col space-y-6 xl:ml-4">

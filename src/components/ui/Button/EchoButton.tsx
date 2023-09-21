@@ -2,11 +2,10 @@ import React from "react";
 import { useSession } from "next-auth/react";
 
 type EchoButtonProps = {
-  onClick: unknown;
   EchoCount: number;
 };
 
-function EchoButton({ onClick, EchoCount }: EchoButtonProps) {
+function EchoButton({ EchoCount }: EchoButtonProps) {
   const session = useSession();
 
   if (session.status !== "authenticated") {
@@ -34,7 +33,6 @@ function EchoButton({ onClick, EchoCount }: EchoButtonProps) {
     <div className="z-10 flex flex-row">
       <button
         type="button"
-        onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
         className={`group flex flex-row items-center text-gray-500 transition-all duration-75 hover:text-green-500 focus-visible:text-green-500`}
       >
         <div

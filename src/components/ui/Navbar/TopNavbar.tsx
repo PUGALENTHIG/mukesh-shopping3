@@ -1,15 +1,13 @@
 import { Avatar } from "@nextui-org/react";
-import Image from "next/image";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useSession } from "next-auth/react";
-import { useTheme } from "next-themes";
+
 import Link from "next/link";
 import React from "react";
 
-import Logo from "/public/echo.png";
-import LogoWhite from "/public/echo-white.png";
 import { debounce } from "@/utils/debounce";
 import SearchBar from "../SearchBar/SearchBar";
+import Logo from "../Logo";
 
 type TopNavbarProps = {
   setTab: React.Dispatch<React.SetStateAction<string>>;
@@ -17,23 +15,8 @@ type TopNavbarProps = {
 };
 
 const TopNavbar = ({ setTab, nav }: TopNavbarProps) => {
-  const { resolvedTheme } = useTheme();
   const session = useSession();
   const user = session.data?.user;
-
-  let src;
-
-  switch (resolvedTheme) {
-    case "dark":
-      src = LogoWhite;
-      break;
-    case "light":
-      src = Logo;
-      break;
-    default:
-      src = LogoWhite;
-      break;
-  }
 
   const [prevScrollPos, setPrevScrollPos] = React.useState(0);
   const [visible, setVisible] = React.useState(true);
@@ -75,7 +58,7 @@ const TopNavbar = ({ setTab, nav }: TopNavbarProps) => {
             <SearchBar />
           ) : (
             <Link href="/">
-              <Image alt="branding" src={src} width={30} />
+              <Logo />
             </Link>
           )}
         </div>
