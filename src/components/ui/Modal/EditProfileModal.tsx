@@ -112,7 +112,7 @@ const WelcomeModal = ({
                       }}
                       className="fallback flex h-full w-full items-center justify-center bg-background bg-opacity-50 bg-blend-overlay transition-colors"
                     >
-                      <label htmlFor="bannerUpload">
+                      <label>
                         <UploadButton
                           aria-label="add banner"
                           className="hidden"

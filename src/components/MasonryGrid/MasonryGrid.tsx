@@ -16,7 +16,7 @@ const MasonryGrid = ({
   setMediaUrls,
   showClose = false,
 }: MasonryProps) => {
-  const removeImage = (indexToRemove: number) => {
+  const removeMedia = (indexToRemove: number) => {
     const updatedMediaUrls = mediaUrls.filter(
       (_, index) => index !== indexToRemove,
     );
@@ -24,11 +24,11 @@ const MasonryGrid = ({
   };
 
   const [isOpen, setIsOpen] = React.useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
-  const lightboxImages = mediaUrls.map((imageUrl) => ({ src: imageUrl }));
+  const [selectedMediaIndex, setSelectedMediaIndex] = React.useState(0);
+  const lightboxMedia = mediaUrls.map((imageUrl) => ({ src: imageUrl }));
 
   const openLightbox = (index: React.SetStateAction<number>) => {
-    setSelectedImageIndex(index);
+    setSelectedMediaIndex(index);
     setIsOpen(true);
   };
 
@@ -79,10 +79,17 @@ const MasonryGrid = ({
                 <button
                   aria-label="close"
                   type="button"
-                  className="absolute z-40 mt-3 rounded-full bg-black bg-opacity-50 p-1 text-white"
-                  onClick={removeImage ? () => removeImage(index) : undefined}
+                  className="absolute z-40 rounded-full bg-black bg-opacity-70 p-1 text-white"
+                  onClick={
+                    removeMedia
+                      ? (e) => {
+                          e.stopPropagation();
+                          removeMedia(index);
+                        }
+                      : undefined
+                  }
                 >
-                  <XMarkIcon width={24} />
+                  <XMarkIcon width={26} />
                 </button>
               </div>
             )}
@@ -100,13 +107,13 @@ const MasonryGrid = ({
 
       {isOpen && (
         <Lightbox
-          styles={{ root: { "--yarl__color_backdrop": "rgba(0, 0, 0, .7)" } }}
+          styles={{ root: { "--yarl__color_backdrop": "rgba(0, 0, 0, .6)" } }}
           className="backdrop-blur-sm"
           open={isOpen}
           close={closeLightbox}
-          slides={lightboxImages}
+          slides={lightboxMedia}
           controller={{ closeOnPullDown: true, closeOnBackdropClick: true }}
-          index={selectedImageIndex}
+          index={selectedMediaIndex}
           /* render={{ buttonNext: () => null, buttonPrev: () => null }} */
         />
       )}
