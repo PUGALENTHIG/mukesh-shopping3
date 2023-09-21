@@ -14,6 +14,7 @@ import { CameraIcon } from "@heroicons/react/24/outline";
 import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import { UploadButton } from "@/utils/uploadthing";
+import { useToast } from "@/components/ContextProviders/ToastContext";
 const profileFallback = "./default-profile.jpg";
 
 type EditProfileModalProps = {
@@ -43,6 +44,8 @@ const WelcomeModal = ({
   activity,
 }: EditProfileModalProps) => {
   const router = useRouter();
+
+  const { showSuccessToast, showErrorToast } = useToast();
 
   const [profileData, setProfileData] = React.useState({
     id: id,
@@ -116,17 +119,17 @@ const WelcomeModal = ({
                           endpoint="bannerImage"
                           onClientUploadComplete={(res) => {
                             // Do something with the response
-                            console.log("Files: ", res?.[0]?.url);
+                            /* console.log("Files: ", res?.[0]?.url); */
                             setBannerIsLoading(false);
                             setProfileData({
                               ...profileData,
                               banner: res?.[0]?.url ?? "",
                             });
-                            alert("Upload Completed");
+                            showSuccessToast("Upload Completed");
                           }}
                           onUploadError={(error: Error) => {
                             // Do something with the error.
-                            alert(`ERROR! ${error.message}`);
+                            showErrorToast(`ERROR! ${error.message}`);
                           }}
                           onUploadBegin={
                             (/* name */) => {
@@ -161,11 +164,11 @@ const WelcomeModal = ({
                             ...profileData,
                             image: res?.[0]?.url ?? "",
                           });
-                          alert("Upload Completed");
+                          showSuccessToast("Upload Completed");
                         }}
                         onUploadError={(error: Error) => {
                           // Do something with the error.
-                          alert(`ERROR! ${error.message}`);
+                          showErrorToast(`ERROR! ${error.message}`);
                         }}
                         onUploadBegin={
                           (/* name */) => {

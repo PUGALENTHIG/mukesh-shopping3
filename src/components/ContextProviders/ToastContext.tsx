@@ -32,7 +32,7 @@ export function ToastProvider({
         autoClose={2000}
         hideProgressBar
         theme={theme as Theme}
-        position="bottom-right"
+        position="top-right"
       />
       {children}
     </ToastContext.Provider>
