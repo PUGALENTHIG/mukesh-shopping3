@@ -65,6 +65,7 @@ model Comment {
   parent    Comment?  @relation("replies", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   parentId  String?
   replies   Comment[] @relation("replies")
+  
 
   @@index([postId])
   @@index([authorId])

@@ -42,8 +42,8 @@ const TopNavbar = ({ setTab, nav }: TopNavbarProps) => {
   return (
     <nav
       className={`sticky ${
-        !visible && "-translate-y-40"
-      } top-0 z-50 flex w-full flex-col border-y bg-background bg-opacity-50 backdrop-blur-xl transition-transform duration-200`}
+        !visible && "-translate-y-40 md:translate-y-0"
+      } top-0 z-50 flex w-full flex-col border-y bg-background bg-opacity-70 backdrop-blur-xl transition-transform duration-200`}
     >
       <h1 className=" hidden px-4 py-3 text-2xl font-bold md:block">Home</h1>
       <div className="mb-1 flex flex-row px-3 pb-1 pt-3 md:hidden">
@@ -71,13 +71,13 @@ const TopNavbar = ({ setTab, nav }: TopNavbarProps) => {
         >
           <Tabs.List className="flex shrink-0 ">
             <Tabs.Trigger
-              className=" flex h-[45px] flex-1 select-none items-center justify-center transition-all duration-100 data-[state=active]:border-b-5 data-[state=active]:border-violet-500"
+              className=" flex h-[45px] flex-1 select-none items-center justify-center transition-all duration-100 data-[state=active]:border-b-5 data-[state=active]:border-violet-500 data-[state=active]:font-bold"
               value="recent"
             >
               Recent
             </Tabs.Trigger>
             <Tabs.Trigger
-              className=" flex h-[45px] flex-1 select-none items-center justify-center transition-all duration-100 data-[state=active]:border-b-4 data-[state=active]:border-violet-500 "
+              className=" flex h-[45px] flex-1 select-none items-center justify-center transition-all duration-100 data-[state=active]:border-b-4 data-[state=active]:border-violet-500 data-[state=active]:font-bold"
               value="following"
             >
               Following

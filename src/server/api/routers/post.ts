@@ -81,6 +81,27 @@ export const postRouter = createTRPCRouter({
 
       return post;
     }),
+  deletePost: protectedProcedure
+    .input(z.object({ postId: z.string() }))
+    .mutation(async ({ input: { postId }, ctx }) => {
+      const post = await ctx.prisma.post.findUnique({
+        where: { id: postId },
+      });
+
+      if (!post) {
+        throw new Error(`Post with ID ${postId} not found.`);
+      }
+
+      if (post.authorId !== ctx.session.user.id) {
+        throw new Error("You are not authorized to delete this post.");
+      }
+
+      await ctx.prisma.post.delete({
+        where: { id: postId },
+      });
+
+      return true;
+    }),
   toggleLike: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input: { id }, ctx }) => {
@@ -115,10 +136,28 @@ export const postRouter = createTRPCRouter({
           authorId: ctx.session.user.id,
         },
       });
-
-      //notification?
-
       return comment;
+    }),
+  deleteComment: protectedProcedure
+    .input(z.object({ postId: z.string() }))
+    .mutation(async ({ input: { postId }, ctx }) => {
+      const comment = await ctx.prisma.comment.findUnique({
+        where: { id: postId },
+      });
+
+      if (!comment) {
+        throw new Error(`Comment with ID ${postId} not found.`);
+      }
+
+      if (comment.authorId !== ctx.session.user.id) {
+        throw new Error("You are not authorized to delete this comment.");
+      }
+
+      await ctx.prisma.comment.delete({
+        where: { id: postId },
+      });
+
+      return true;
     }),
   searchPosts: publicProcedure
     .input(

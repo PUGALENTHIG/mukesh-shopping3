@@ -1,6 +1,5 @@
 import React from "react";
 import { signIn, useSession } from "next-auth/react";
-
 import Link from "next/link";
 
 import { Button } from "@nextui-org/react";

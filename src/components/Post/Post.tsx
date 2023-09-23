@@ -8,6 +8,10 @@ import {
   ModalContent,
   ModalBody,
   useDisclosure,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
 } from "@nextui-org/react";
 import { timeAgo } from "@/utils/dateFormat";
 import { useRouter } from "next/router";
@@ -17,6 +21,9 @@ import MasonryGrid from "../MasonryGrid/MasonryGrid";
 import ShareButton from "../ui/Button/ShareButton";
 import EchoButton from "../ui/Button/EchoButton";
 import UserLinkRenderer from "@/utils/UserLinkRenderer";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
+import { TrashIcon, FlagIcon } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
 
 type PostProps = {
   id: string;
@@ -62,6 +69,9 @@ function Post({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const router = useRouter();
+  const session = useSession();
+  const user = session.data?.user;
+
   const trpcUtils = api.useContext();
   const toggleLike = api.post.toggleLike.useMutation({
     onSuccess: ({ addedLike }) => {
@@ -102,7 +112,7 @@ function Post({
       trpcUtils.post.singlePost.setInfiniteData({ postId: id }, updateData);
     },
   });
-
+  const deletePost = api.post.deletePost.useMutation();
   const postUrl = `/user/${author.username}/${id}`;
 
   const handleToggleLike = () => {
@@ -110,6 +120,13 @@ function Post({
       toggleLike.mutate({ id });
     } catch (error) {
       console.error("Error toggling like:", error);
+    }
+  };
+
+  const handlePostDelete = () => {
+    if (author.id === user?.id && session.status === "authenticated") {
+      deletePost.mutate({ postId: id });
+      router.reload();
     }
   };
 
@@ -135,23 +152,53 @@ function Post({
               </Link>
             </div>
             <div className="flex flex-grow flex-col">
-              <div className="flex flex-row items-center gap-1">
-                <Link
-                  onClick={(e) => e.stopPropagation()}
-                  className="z-10"
-                  href={`/user/${author.username}`}
-                >
-                  <span className=" overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold outline-none hover:underline sm:max-w-[10px] lg:w-auto lg:text-base">
-                    {author.name}
+              <div className="flex flex-row justify-between gap-1">
+                <div>
+                  <Link
+                    onClick={(e) => e.stopPropagation()}
+                    className="z-10"
+                    href={`/user/${author.username}`}
+                  >
+                    <span className=" overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold outline-none hover:underline sm:max-w-[10px] lg:w-auto lg:text-base">
+                      {author.name}
+                    </span>
+                  </Link>
+                  <span className=" overflow-hidden text-ellipsis whitespace-nowrap px-[2px] text-xs text-gray-400 md:px-1 lg:text-sm">
+                    @{author.username}
                   </span>
-                </Link>
-                <span className=" overflow-hidden text-ellipsis whitespace-nowrap px-[2px] text-xs text-gray-400 md:px-1 lg:text-sm">
-                  @{author.username}
-                </span>
-                <span className=" text-gray-400">·</span>
-                <span className=" overflow-hidden text-ellipsis whitespace-nowrap px-[2px] text-xs text-gray-400 md:px-1 lg:text-sm">
-                  {timeAgo(createdAt)}
-                </span>
+                  <span className=" text-gray-400">·</span>
+                  <span className=" overflow-hidden text-ellipsis whitespace-nowrap px-[2px] text-xs text-gray-400 md:px-1 lg:text-sm">
+                    {timeAgo(createdAt)}
+                  </span>
+                </div>
+                <div>
+                  <Dropdown className="elevation-1 z-10">
+                    <DropdownTrigger>
+                      <EllipsisHorizontalIcon className="w-5" />
+                    </DropdownTrigger>
+
+                    <DropdownMenu>
+                      {author.id === user?.id &&
+                      session.status === "authenticated" ? (
+                        <DropdownItem
+                          key="delete"
+                          className="text-danger"
+                          color="danger"
+                          startContent={<TrashIcon className="w-4" />}
+                          onClick={handlePostDelete}
+                        >
+                          Delete Post
+                        </DropdownItem>
+                      ) : (
+                        <DropdownItem
+                          startContent={<FlagIcon className="w-5" />}
+                        >
+                          Report Post
+                        </DropdownItem>
+                      )}
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
               </div>
               <div className="z-10 py-1">
                 <UserLinkRenderer
