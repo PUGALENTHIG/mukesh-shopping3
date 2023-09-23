@@ -27,7 +27,7 @@ Here're some of the features implemented so far:
 What you can expect to see soon:
 
 *   Auth0 integrationn 
-*   Echo(repost) tweets
+*   Echo(repost)
 *   User search
 *   Recent Search history
 *   Better UX
