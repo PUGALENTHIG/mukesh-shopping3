@@ -38,7 +38,7 @@ const Login: NextPage = ({}: InferGetServerSidePropsType<
     <section className="flex h-full w-full justify-center">
       <div className="dark:elevation-1 m-auto mx-auto w-full max-w-sm rounded-lg border p-6 shadow-lg">
         <div className="container mx-auto flex items-center justify-center pt-4">
-          <Logo />
+          <Logo width={32} />
         </div>
         <form onSubmit={handleSubmit} className="mt-6">
           <div>

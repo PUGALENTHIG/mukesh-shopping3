@@ -33,7 +33,7 @@ const RegisterForm = () => {
     <div className="container mx-auto flex max-w-md items-center justify-center px-6">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="mx-auto flex justify-center">
-          <Logo />
+          <Logo width={32} />
         </div>
         <div className=" mt-8 flex w-full flex-col items-center gap-4 ">
           <span className="absolute"></span>
