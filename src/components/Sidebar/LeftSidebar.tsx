@@ -34,11 +34,11 @@ const LeftSidebar = () => {
     p-2 sm:flex xl:w-[320px] xl:items-start"
     >
       <div
-        className=" m-2 flex h-14 w-14
-        items-center justify-center pl-8 xl:ml-4"
+        className=" m-2 flex
+        items-center justify-center pl-8 pt-2 xl:ml-4"
       >
         <Link href="/">
-          <Logo />
+          <Logo width={30} />
         </Link>
       </div>
       <div className="my-8 flex flex-col space-y-6 xl:ml-4">

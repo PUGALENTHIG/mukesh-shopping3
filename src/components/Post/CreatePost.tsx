@@ -109,7 +109,7 @@ const CreatePost = () => {
 
   function handlePost(e: FormEvent) {
     e.preventDefault();
-    if (!draft) {
+    if (!draft && mediaUrls.length === 0) {
       showErrorToast("Post cannot be empty");
     } else {
       createPost.mutate({ content: draft, mediaUrls: mediaUrls });
@@ -119,7 +119,7 @@ const CreatePost = () => {
 
   return (
     <div className="flex w-full flex-row border-b-1 px-3 py-4 md:px-6">
-      <div className="h-full pr-4">
+      <div className="h-full pr-[10px] md:pr-3 lg:pr-4">
         <Avatar radius="full" size="md" src={user?.image ?? ""} />
       </div>
       <div className="flex w-full flex-col text-xl">

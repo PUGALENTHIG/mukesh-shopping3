@@ -153,21 +153,23 @@ function Post({
             </div>
             <div className="flex flex-grow flex-col">
               <div className="flex flex-row justify-between gap-1">
-                <div>
+                <div className="flex items-center">
                   <Link
                     onClick={(e) => e.stopPropagation()}
-                    className="z-10"
                     href={`/user/${author.username}`}
                   >
-                    <span className=" overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold outline-none hover:underline sm:max-w-[10px] lg:w-auto lg:text-base">
+                    <span className="block max-w-[100px] overflow-hidden overflow-ellipsis whitespace-nowrap text-xs font-bold outline-none hover:underline md:max-w-fit lg:text-base">
                       {author.name}
                     </span>
                   </Link>
-                  <span className=" overflow-hidden text-ellipsis whitespace-nowrap px-[2px] text-xs text-gray-400 md:px-1 lg:text-sm">
+                  <span className="inline-flex overflow-hidden text-ellipsis whitespace-nowrap px-[4px] text-xs text-gray-400 md:px-1 lg:text-sm">
                     @{author.username}
                   </span>
-                  <span className=" text-gray-400">·</span>
-                  <span className=" overflow-hidden text-ellipsis whitespace-nowrap px-[2px] text-xs text-gray-400 md:px-1 lg:text-sm">
+                  <div className="flex h-full items-center justify-center">
+                    <span className=" text-gray-400">·</span>
+                  </div>
+
+                  <span className=" overflow-hidden text-ellipsis whitespace-nowrap px-[4px] text-xs text-gray-400 md:px-1 lg:text-sm">
                     {timeAgo(createdAt)}
                   </span>
                 </div>
@@ -200,12 +202,12 @@ function Post({
                   </Dropdown>
                 </div>
               </div>
-              <div className="z-10 py-1">
+              <div className="z-10 py-1 text-sm  md:text-lg">
                 <UserLinkRenderer
                   onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
                     e.stopPropagation()
                   }
-                  className="text-base font-semibold text-violet-500 hover:underline md:text-lg"
+                  className=" font-semibold text-violet-500 hover:underline sm:text-base"
                   text={content}
                 />
               </div>

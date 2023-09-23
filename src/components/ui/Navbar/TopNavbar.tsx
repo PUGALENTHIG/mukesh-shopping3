@@ -58,7 +58,7 @@ const TopNavbar = ({ setTab, nav }: TopNavbarProps) => {
             <SearchBar />
           ) : (
             <Link href="/">
-              <Logo />
+              <Logo width={32} />
             </Link>
           )}
         </div>

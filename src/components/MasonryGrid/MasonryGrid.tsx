@@ -62,7 +62,7 @@ const MasonryGrid = ({
             className={
               `${
                 mediaUrls?.length === 1
-                  ? `h-fit max-w-[800px]`
+                  ? `h-[450px] max-w-[800px] md:h-[600px]`
                   : `h-full w-fit min-w-fit max-w-[10rem] md:max-w-[15rem] lg:max-w-[15rem] xl:max-w-[15rem] 2xl:max-w-[20rem]`
               }` +
               `${
