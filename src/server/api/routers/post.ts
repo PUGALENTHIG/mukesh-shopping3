@@ -9,6 +9,22 @@ import {
 import { type inferAsyncReturnType } from "@trpc/server";
 import { type Prisma } from "@prisma/client";
 
+const invertedIndex: Record<string, string[]> = {};
+
+function updateInvertedIndex(postId: string, content: string): void {
+  // "Tokenizer" 😭
+  const words = content.toLowerCase().split(/\s+/);
+
+  words.forEach((word) => {
+    if (!invertedIndex[word]) {
+      invertedIndex[word] = [];
+    }
+
+    invertedIndex[word]?.push(postId);
+  });
+  console.log(invertedIndex);
+}
+
 export const postRouter = createTRPCRouter({
   feed: publicProcedure
     .input(
@@ -76,6 +92,8 @@ export const postRouter = createTRPCRouter({
       const post = await ctx.prisma.post.create({
         data: { content, mediaUrls, authorId: ctx.session.user.id },
       });
+
+      updateInvertedIndex(post.id, content);
 
       void ctx.revalidateSSG?.(`/${ctx.session.user.username}`);
 
@@ -235,6 +253,11 @@ async function getPosts({
       },
     },
   });
+
+  for (const d of data) {
+    updateInvertedIndex(d.id, d.content);
+  }
+
   let nextCursor: typeof cursor | undefined;
   if (data.length > limit) {
     const nextItem = data.pop();
@@ -266,19 +289,17 @@ async function getSearchedPost({
   limit,
   ctx,
 }: {
-  searchTerm: string | undefined;
+  searchTerm: string;
   cursor: { id: string; createdAt: Date } | undefined;
   limit: number;
   ctx: inferAsyncReturnType<typeof createTRPCContext>;
 }) {
   const currentAuthorId = ctx.session?.user.id;
-  const data = await ctx.prisma.post.findMany({
-    where: {
-      content: {
-        contains: searchTerm?.toLowerCase(),
-        mode: "insensitive",
-      },
-    },
+
+  const matchingPostIds = invertedIndex[searchTerm.toLowerCase()] ?? [];
+
+  const posts = await ctx.prisma.post.findMany({
+    where: { id: { in: matchingPostIds } },
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     take: limit + 1,
     cursor: cursor ? { createdAt_id: cursor } : undefined,
@@ -310,15 +331,17 @@ async function getSearchedPost({
       },
     },
   });
+
   let nextCursor: typeof cursor | undefined;
-  if (data.length > limit) {
-    const nextItem = data.pop();
+  if (posts.length > limit) {
+    const nextItem = posts.pop();
     if (nextItem != null) {
       nextCursor = { id: nextItem.id, createdAt: nextItem.createdAt };
     }
   }
+
   return {
-    posts: data.map((post) => {
+    posts: posts.map((post) => {
       return {
         id: post.id,
         content: post.content,

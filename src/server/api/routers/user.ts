@@ -5,13 +5,35 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { PrismaClient } from "@prisma/client";
+
+interface UserProfile {
+  id: string;
+  name: string;
+  image: string | null;
+  username: string | null;
+  banner: string | null;
+  bio: string | null;
+  followersCount: number;
+  followingCount: number;
+  postsCount: number;
+  isFollowing: boolean;
+}
+
+const prisma = new PrismaClient();
+const userCache = new Map<string, UserProfile>();
 
 export const userRouter = createTRPCRouter({
   getUser: publicProcedure
     .input(z.object({ username: z.string() }))
     .query(async ({ input: { username }, ctx }) => {
+      // Check if user profile is in the cache
+      if (userCache.has(username)) {
+        return userCache.get(username);
+      }
+
       const currentUserId = ctx.session?.user.id;
-      const profile = await ctx.prisma.user.findUnique({
+      const profile = await prisma.user.findUnique({
         where: { username },
         select: {
           id: true,
@@ -28,9 +50,12 @@ export const userRouter = createTRPCRouter({
           following: true,
         },
       });
-      if (profile == null) return;
 
-      return {
+      if (profile == null) {
+        return null;
+      }
+
+      userCache.set(username, {
         id: profile.id,
         name: profile.name,
         image: profile.image,
@@ -41,7 +66,10 @@ export const userRouter = createTRPCRouter({
         followingCount: profile._count.following,
         postsCount: profile._count.posts,
         isFollowing: profile.followers.length > 0,
-      };
+      });
+
+      console.log(userCache.get(username));
+      return userCache.get(username);
     }),
   updateUser: protectedProcedure
     .input(
