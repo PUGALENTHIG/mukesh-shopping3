@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { type FormEvent } from "react";
 import type {
   GetServerSideProps,
@@ -40,7 +38,7 @@ const Login: NextPage = ({}: InferGetServerSidePropsType<
         <div className="container mx-auto flex items-center justify-center pt-4">
           <Logo width={32} />
         </div>
-        <form onSubmit={handleSubmit} className="mt-6">
+        <form onSubmit={() => handleSubmit} className="mt-6">
           <div>
             <Input
               label="Username"

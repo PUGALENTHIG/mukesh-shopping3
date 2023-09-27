@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import React from "react";
 import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/router";
@@ -31,7 +30,7 @@ const RegisterForm = () => {
 
   return (
     <div className="container mx-auto flex max-w-md items-center justify-center px-6">
-      <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+      <form className="w-full" onSubmit={() => handleSubmit(onSubmit)}>
         <div className="mx-auto flex justify-center">
           <Logo width={32} />
         </div>
