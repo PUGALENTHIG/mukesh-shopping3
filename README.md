@@ -2,7 +2,7 @@
 
 <p align="center"><img src="https://socialify.git.ci/sarveshpop/echo/image?font=Inter&amp;language=1&amp;name=1&amp;owner=1&amp;pattern=Solid&amp;stargazers=1&amp;theme=Dark" alt="project-image"></p>
 
-<p id="description">A social media application built using React and NextJS.</p>
+<p id="description">A social media application built using React and NextJS. Bootstrapped with T3 stack.</p>
 
 <h2>🚀 Demo</h2>
 
@@ -35,7 +35,7 @@ What you can expect to see soon:
 
 <h2>🚧 Note</h2>
 
-Following limitations have been applied on the hosted webiste to avoid spam:
+Following limitations have been applied on the hosted website to avoid spam:
 
 *   Post image upload restricted to 1MB
 *   Profile picture upload restricted to 4MB
