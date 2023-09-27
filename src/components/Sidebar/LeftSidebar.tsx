@@ -1,5 +1,6 @@
 import React from "react";
 import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 
 import { Button } from "@nextui-org/react";
@@ -14,6 +15,7 @@ import UserCard from "./UserCard";
 import Logo from "../ui/Logo";
 
 const LeftSidebar = () => {
+  const router = useRouter();
   const session = useSession();
   const user = session.data?.user;
 
@@ -24,7 +26,7 @@ const LeftSidebar = () => {
     {
       text: "Profile",
       icon: <UserIcon />,
-      link: user?.username ? `/user/${user.username}` : "/api/auth/signin",
+      link: user?.username ? `/user/${user.username}` : "auth/login",
     },
   ];
 
@@ -61,7 +63,8 @@ const LeftSidebar = () => {
           <UserCard user={user} />
         ) : (
           <Button
-            onClick={() => void signIn()}
+            onClick={() => void router.push(`auth/login`) /* signIn() */}
+            href="auth/login"
             variant="light"
             className="flex justify-start px-8 py-6"
             startContent={

@@ -5,16 +5,16 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-/* import { loginSchema } from "@/validation/auth"; */
+import { loginSchema } from "@/validation/auth";
 
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
-/* import CredentialsProvider from "next-auth/providers/credentials"; */
+import CredentialsProvider from "next-auth/providers/credentials";
 
-/* import argon2 from "argon2"; */
+import argon2 from "argon2";
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
-/* import { type User } from "@prisma/client"; */
+import { type User } from "@prisma/client";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -40,7 +40,7 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: async ({ session, user /* token */ }) => {
+    session: async ({ session, user, token }) => {
       if (user) {
         // Fetch the user's username from the database based on their ID
         const dbUser = await prisma.user.findUnique({
@@ -59,11 +59,11 @@ export const authOptions: NextAuthOptions = {
           };
         }
       }
-      /*  session.user.id = token.id as string;
-      session.user.username = token.username as string; */
+      session.user.id = token.id as string;
+      session.user.username = token.username as string;
       return session;
     },
-    /*    jwt({ token, account, user }) {
+    jwt({ token, account, user }) {
       if (account) {
         token.accessToken = account.access_token;
         token.id = user.id;
@@ -71,17 +71,17 @@ export const authOptions: NextAuthOptions = {
         console.log({ user });
       }
       return token;
-    }, */
+    },
   },
   secret: env.NEXTAUTH_SECRET,
   pages: {
-    /* signIn: "/login",
+    signIn: "/login",
     newUser: "/register",
-    error: "/login", */
+    error: "/login",
   },
-  /*   session: {
+  session: {
     strategy: "jwt",
-  }, */
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     DiscordProvider({
@@ -92,7 +92,7 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
-    /* CredentialsProvider({
+    CredentialsProvider({
       credentials: {
         username: {},
         password: {},
@@ -116,7 +116,7 @@ export const authOptions: NextAuthOptions = {
 
         return user;
       },
-    }), */
+    }),
   ],
 };
 
