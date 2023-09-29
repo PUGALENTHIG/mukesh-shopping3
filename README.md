@@ -16,7 +16,7 @@ Here're some of the features implemented so far:
 
 *   User Auth via multiple providers
 *   Secure password hashing
-*   Create Posts
+*   Create, Delete Posts
 *   Like Share and Comment on Posts
 *   Follow users
 *   Tag users in posts
