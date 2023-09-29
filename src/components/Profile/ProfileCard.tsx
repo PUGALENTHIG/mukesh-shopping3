@@ -1,16 +1,11 @@
 import React from "react";
 import { api } from "@/utils/api";
-import {
-  Avatar,
-  Button,
-  Image,
-  Skeleton,
-  useDisclosure,
-} from "@nextui-org/react";
+import { Avatar, Button, Image, useDisclosure } from "@nextui-org/react";
 import pluralize from "@/utils/pluralize";
 import { useSession } from "next-auth/react";
 import FollowButton from "../ui/Button/FollowButton";
 import EditProfileModal from "@/components/ui/Modal/EditProfileModal";
+const fallbackImage = "./default-profile.jpg";
 
 type ProfileProps = {
   id: string;
@@ -68,15 +63,15 @@ const ProfileCard = ({
             radius="none"
           />
         ) : (
-          <Skeleton className="fallback h-full w-full bg-gray-600"></Skeleton>
+          <div className="fallback h-full w-full bg-gray-600"></div>
         )}
       </div>
       <div className="mx-6 flex flex-row justify-between">
-        {image ? (
-          <Avatar className="-mt-16  h-32 w-32" isBordered src={image} />
-        ) : (
-          <Skeleton className="-mt-16 h-32 w-32 rounded-full"></Skeleton>
-        )}
+        <Avatar
+          className="-mt-16  h-32 w-32"
+          isBordered
+          src={image ?? fallbackImage}
+        />
 
         <FollowButton
           userId={id}
@@ -95,26 +90,12 @@ const ProfileCard = ({
         )}
       </div>
       <div className="mx-6 my-4">
-        {name ? (
-          <div className="pfp text-xl font-bold">{name}</div>
-        ) : (
-          <Skeleton className="mt-2 w-fit text-xl">
-            Echo User Full Name
-          </Skeleton>
-        )}
-        {username ? (
-          <div className="username text-medium text-gray-400">@{username}</div>
-        ) : (
-          <Skeleton className="username mt-3 w-fit text-medium">
-            Echo Username
-          </Skeleton>
-        )}
-        {bio ? (
-          <div className="bio my-3">{bio}</div>
-        ) : (
-          <Skeleton className="bio my-3 h-6 w-48"></Skeleton>
-        )}
-        <Skeleton className="bio my-3 w-fit"></Skeleton>
+        <div className="pfp text-xl font-bold">{name}</div>
+
+        <div className="username text-medium text-gray-400">@{username}</div>
+
+        <div className="bio my-3">{bio}</div>
+
         <div className="my-1 flex flex-row">
           <div>
             <span className="font-semibold">{followingCount}</span>

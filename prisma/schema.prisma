@@ -124,6 +124,7 @@ model User {
     sessions      Session[]
 
     bio           String?
+    badges        String[]
     username      String?    @unique
     banner        String?
     posts         Post[]

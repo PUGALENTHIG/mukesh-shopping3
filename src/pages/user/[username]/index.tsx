@@ -10,9 +10,8 @@ import type {
   NextPage,
 } from "next";
 import Head from "next/head";
-import ErrorPage from "next/error";
 import Link from "next/link";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import ProfileCard from "@/components/Profile/ProfileCard";
 import PostsList from "@/components/PostsList/PostsList";
@@ -20,47 +19,24 @@ import PostsList from "@/components/PostsList/PostsList";
 const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   username,
 }) => {
+  const { data: user } = api.user.getUser.useQuery({ username });
   const posts = api.post.profileFeed.useInfiniteQuery(
     { username: username },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   );
-  const { data: user } = api.user.getUser.useQuery({ username });
 
-  const [profileData, setProfileData] = React.useState<typeof user>({
-    id: "",
-    name: "",
-    image: "",
-    username: "",
-    banner: "",
-    bio: "",
-    followersCount: 0,
-    followingCount: 0,
-    postsCount: 0,
-    isFollowing: false,
-  });
-
-  React.useEffect(() => {
-    if (user) setProfileData({ ...user });
-  }, [user]);
-
-  if (!profileData) {
+  if (!user) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
-        <Spinner size="lg" />
+        <h1 className="text-2xl">{`User @${username} not found`}</h1>
       </div>
     );
   }
 
-  if (profileData.name === null) return <ErrorPage statusCode={404} />;
-
   return (
     <>
       <Head>
-        <title>
-          {profileData.username
-            ? `@` + profileData.username + " - Echo"
-            : "Echo"}
-        </title>
+        <title>{username ? `@` + username + " - Echo" : "Echo"}</title>
       </Head>
       <nav className="sticky top-0 z-50 flex w-full border-y backdrop-blur-xl">
         <Link href="..">
@@ -69,14 +45,13 @@ const ProfilePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           </Button>
         </Link>
         <div className="flex flex-col py-2 pl-6">
-          <span className="font-bold">{profileData.name}</span>
+          <span className="font-bold">{user.name}</span>
           <span className="text-sm text-gray-400">
-            {profileData.postsCount}{" "}
-            {pluralize(profileData.postsCount ?? 0, "Post", "Posts")}
+            {user.postsCount} {pluralize(user.postsCount ?? 0, "Post", "Posts")}
           </span>
         </div>
       </nav>
-      <ProfileCard {...profileData} username={profileData.username ?? ""} />
+      <ProfileCard {...user} username={username} />
       <main>
         <PostsList
           posts={posts.data?.pages.flatMap((page) => page.posts)}
@@ -99,7 +74,7 @@ export const getStaticPaths: GetStaticPaths = () => {
 };
 
 export async function getStaticProps(
-  context: GetStaticPropsContext<{ username: string; id: string | undefined }>,
+  context: GetStaticPropsContext<{ username: string; id: string }>,
 ) {
   const username = context.params?.username;
 

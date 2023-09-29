@@ -212,6 +212,7 @@ function Post({
                 />
               </div>
               <div
+              className="w-fit"
                 onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                   e.stopPropagation();
                 }}

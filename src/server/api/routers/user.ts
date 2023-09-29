@@ -5,7 +5,6 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { PrismaClient } from "@prisma/client";
 
 interface UserProfile {
   id: string;
@@ -20,7 +19,6 @@ interface UserProfile {
   isFollowing: boolean;
 }
 
-const prisma = new PrismaClient();
 const userCache = new Map<string, UserProfile>();
 
 export const userRouter = createTRPCRouter({
@@ -33,7 +31,7 @@ export const userRouter = createTRPCRouter({
       }
 
       const currentUserId = ctx.session?.user.id;
-      const profile = await prisma.user.findUnique({
+      const profile = await ctx.prisma.user.findUnique({
         where: { username },
         select: {
           id: true,
@@ -44,7 +42,7 @@ export const userRouter = createTRPCRouter({
           bio: true,
           _count: { select: { followers: true, following: true, posts: true } },
           followers:
-            currentUserId == null
+            currentUserId == null || undefined
               ? undefined
               : { where: { id: currentUserId } },
           following: true,
@@ -65,7 +63,7 @@ export const userRouter = createTRPCRouter({
         followersCount: profile._count.followers,
         followingCount: profile._count.following,
         postsCount: profile._count.posts,
-        isFollowing: profile.followers.length > 0,
+        isFollowing: profile.followers ? profile.followers.length > 0 : false,
       });
 
       console.log(userCache.get(username));

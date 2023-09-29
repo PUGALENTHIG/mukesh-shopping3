@@ -30,8 +30,8 @@ const LeftSidebar = () => {
 
   return (
     <div
-      className="sticky top-0 hidden h-full flex-col items-center
-    p-2 sm:flex xl:w-[320px] xl:items-start"
+      className="sticky top-0 mr-4 hidden h-full flex-col
+    items-center p-2 sm:flex xl:w-[320px] xl:items-start"
     >
       <div
         className=" m-2 flex
