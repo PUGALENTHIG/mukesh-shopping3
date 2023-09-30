@@ -117,14 +117,15 @@ model User {
     id            String    @id @default(cuid())
     name          String
     email         String    @unique
-    password     String?
+    password      String?
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
 
     bio           String?
-    badges        String[]
+    badge         String[]
+    links         String[]
     username      String?    @unique
     banner        String?
     posts         Post[]

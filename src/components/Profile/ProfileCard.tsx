@@ -14,6 +14,7 @@ type ProfileProps = {
   banner: string | null;
   image: string | null;
   bio: string | null;
+  links: string[] | undefined;
   followersCount: number;
   followingCount: number;
   isFollowing: boolean;
@@ -26,6 +27,7 @@ const ProfileCard = ({
   name,
   username,
   bio,
+  links,
   followingCount,
   followersCount,
   isFollowing,
