@@ -4,13 +4,15 @@ import {
   Avatar,
   Button,
   Image,
-  Skeleton,
+  Chip,
   useDisclosure,
+  Skeleton,
 } from "@nextui-org/react";
 import pluralize from "@/utils/pluralize";
 import { useSession } from "next-auth/react";
 import FollowButton from "../ui/Button/FollowButton";
 import EditProfileModal from "@/components/ui/Modal/EditProfileModal";
+import Link from "next/link";
 
 type ProfileProps = {
   id: string;
@@ -19,6 +21,7 @@ type ProfileProps = {
   banner: string | null;
   image: string | null;
   bio: string | null;
+  links: string[] | null;
   followersCount: number;
   followingCount: number;
   isFollowing: boolean;
@@ -31,6 +34,7 @@ const ProfileCard = ({
   name,
   username,
   bio,
+  links,
   followingCount,
   followersCount,
   isFollowing,
@@ -95,37 +99,46 @@ const ProfileCard = ({
         )}
       </div>
       <div className="mx-6 my-4">
-        {name ? (
-          <div className="pfp text-xl font-bold">{name}</div>
-        ) : (
-          <Skeleton className="mt-2 w-fit text-xl">
-            Echo User Full Name
-          </Skeleton>
-        )}
-        {username ? (
-          <div className="username text-medium text-gray-400">@{username}</div>
-        ) : (
-          <Skeleton className="username mt-3 w-fit text-medium">
-            Echo Username
-          </Skeleton>
-        )}
-        {bio ? (
-          <div className="bio my-3">{bio}</div>
-        ) : (
-          <Skeleton className="bio my-3 h-6 w-48"></Skeleton>
-        )}
-        <Skeleton className="bio my-3 w-fit"></Skeleton>
-        <div className="my-1 flex flex-row">
+        <div className="pfp text-xl font-bold">{name}</div>
+
+        <div className="username text-medium text-gray-400">@{username}</div>
+
+        <div className="bio my-3">{bio}</div>
+
+        <div className="my-2 flex flex-row">
           <div>
             <span className="font-semibold">{followingCount}</span>
-            <span className="ml-1">Following</span>
+            <span className="ml-1 text-gray-400">Following</span>
           </div>
           <div className="pl-4">
             <span className="font-semibold">{followersCount}</span>
-            <span className="ml-1">
+            <span className="ml-1 text-gray-400">
               {pluralize(followersCount, "Follower", "Followers")}
             </span>
           </div>
+        </div>
+        <div className="links ml-[-4px] grid w-fit grid-cols-2 md:grid-cols-4">
+          {links?.map((link, i) => {
+            return (
+              <Link key={i} href={link} locale={false} className="w-fit">
+                <Chip
+                  className=" mx-1 mt-1 border dark:bg-zinc-800"
+                  startContent={
+                    <Image
+                      removeWrapper
+                      className="w-4"
+                      src={`https://www.google.com/s2/favicons?domain=${link}&size=256`}
+                      alt={`${link} favicon`}
+                    ></Image>
+                  }
+                >
+                  <span className="text-xs md:text-base">
+                    {link.match(/([^/]*)$/)?.[0]}
+                  </span>
+                </Chip>
+              </Link>
+            );
+          })}
         </div>
 
         <EditProfileModal

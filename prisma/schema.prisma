@@ -112,26 +112,29 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+    id            String    @id @default(cuid())
+    name          String
+    email         String    @unique
+    password      String?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
 
-  bio            String?
-  username       String?   @unique
-  banner         String?
-  posts          Post[]
-  likes          Like[]
-  authoredEchoes Echo[]    @relation("AuthoredEchoes")
-  echoedPosts    Echo[]    @relation("EchoedPosts")
-  comments       Comment[] @relation("comments")
-  following      User[]    @relation("Followers")
-  followers      User[]    @relation("Followers")
-  searches       Search[]
+    verified      Boolean   @default(false)
+    bio           String?
+    badge         String?
+    links         String[]
+    username      String?    @unique
+    banner        String?
+    posts         Post[]
+    likes         Like[]
+    authoredEchoes Echo[]   @relation("AuthoredEchoes")
+    echoedPosts   Echo[]    @relation("EchoedPosts")
+    comments      Comment[] @relation("comments")    
+    following     User[]    @relation("Followers")
+    followers     User[]    @relation("Followers")
+    searches      Search[] 
+    
 }
 
 model VerificationToken {
