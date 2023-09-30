@@ -13,6 +13,7 @@ interface UserProfile {
   username: string | null;
   banner: string | null;
   bio: string | null;
+  links: string[] | null;
   followersCount: number;
   followingCount: number;
   postsCount: number;
@@ -40,6 +41,7 @@ export const userRouter = createTRPCRouter({
           username: true,
           banner: true,
           bio: true,
+          links: true,
           _count: { select: { followers: true, following: true, posts: true } },
           followers:
             currentUserId == null || undefined
@@ -60,6 +62,7 @@ export const userRouter = createTRPCRouter({
         username: profile.username,
         banner: profile.banner,
         bio: profile.bio,
+        links: profile.links,
         followersCount: profile._count.followers,
         followingCount: profile._count.following,
         postsCount: profile._count.posts,
