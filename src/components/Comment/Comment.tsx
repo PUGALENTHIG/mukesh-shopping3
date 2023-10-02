@@ -12,7 +12,7 @@ import Link from "next/link";
 import { timeAgo } from "@/utils/dateFormat";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
 import EchoButton from "../ui/Button/EchoButton";
-import UserLinkRenderer from "@/utils/UserLinkRenderer";
+import LinkRenderer from "@/utils/LinkRenderer";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 import { TrashIcon, FlagIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
@@ -104,7 +104,7 @@ const Comment = ({
               </Dropdown>
             </div>
           </div>
-          <UserLinkRenderer
+          <LinkRenderer
             onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
               e.stopPropagation()
             }

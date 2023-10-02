@@ -2,7 +2,7 @@ import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import PostsList from "@/components/PostsList/PostsList";
@@ -13,6 +13,14 @@ const SearchResult = () => {
   const searchResults = api.post.searchPosts.useInfiniteQuery({
     searchTerm: term,
   });
+
+  if (!searchResults.data) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
 
   return (
     <div>

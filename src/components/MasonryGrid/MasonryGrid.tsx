@@ -2,7 +2,9 @@ import React from "react";
 import { Image } from "@nextui-org/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { Lightbox } from "yet-another-react-lightbox";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 type MasonryProps = {
   mediaUrls: string[];
@@ -112,9 +114,15 @@ const MasonryGrid = ({
           open={isOpen}
           close={closeLightbox}
           slides={lightboxMedia}
+          carousel={{ finite: true }}
           controller={{ closeOnPullDown: true, closeOnBackdropClick: true }}
           index={selectedMediaIndex}
-          /* render={{ buttonNext: () => null, buttonPrev: () => null }} */
+          render={
+            mediaUrls.length === 1
+              ? { buttonNext: () => null, buttonPrev: () => null }
+              : {}
+          }
+          plugins={[Thumbnails]}
         />
       )}
     </div>

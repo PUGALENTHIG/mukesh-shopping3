@@ -141,7 +141,7 @@ const CreatePost = () => {
                 setDraft(e.target.value);
               }}
               placeholder="What's on your mind?"
-              className="w-full resize-none bg-inherit px-2 py-2"
+              className="w-full resize-none bg-inherit px-2 py-2 outline-none"
               ref={draftRef}
               rows={1}
               maxLength={280}
