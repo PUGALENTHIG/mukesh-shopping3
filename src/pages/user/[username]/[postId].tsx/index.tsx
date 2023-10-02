@@ -8,7 +8,7 @@ import type {
   InferGetStaticPropsType,
   NextPage,
 } from "next";
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import PostsList from "@/components/PostsList/PostsList";
 import Comment from "@/components/Comment/Comment";
@@ -22,6 +22,14 @@ const SinglePost: NextPage<
   const posts = api.post.singlePost.useInfiniteQuery({ postId: postId });
   const getComments = api.post.getComments.useQuery({ postId: postId });
   const comments = getComments.data;
+
+  if (!posts) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
 
   return (
     <>
