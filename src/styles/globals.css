@@ -21,7 +21,17 @@
   background-color: #1e1e1e;
 }
 
-/* .link {
-  color: royalblue;
+.glass {
+  inset: 0;
+  --extend-by: 110px;
+  bottom: calc(-1 * var(--extend-by));
+  --cutoff: calc(100% - var(--extend-by));
+  -mask-image: linear-gradient(
+    to bottom,
+    #161616 0,
+    #161616 var(--cutoff) transparent var(--cutoff)
+  );
+  --blur: 20px;
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
 }
- */

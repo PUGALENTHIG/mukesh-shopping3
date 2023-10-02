@@ -20,7 +20,7 @@ import CreateComment from "./CreateComment";
 import MasonryGrid from "../MasonryGrid/MasonryGrid";
 import ShareButton from "../ui/Button/ShareButton";
 import EchoButton from "../ui/Button/EchoButton";
-import UserLinkRenderer from "@/utils/UserLinkRenderer";
+import LinkRenderer from "@/utils/LinkRenderer";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 import { TrashIcon, FlagIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
@@ -95,7 +95,6 @@ function Post({
                     likedByMe: addedLike,
                   };
                 }
-
                 return post;
               }),
             };
@@ -203,7 +202,7 @@ function Post({
                 </div>
               </div>
               <div className="z-10 py-1 text-sm  md:text-lg">
-                <UserLinkRenderer
+                <LinkRenderer
                   onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
                     e.stopPropagation()
                   }
@@ -212,7 +211,7 @@ function Post({
                 />
               </div>
               <div
-              className="w-fit"
+                className="w-fit"
                 onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                   e.stopPropagation();
                 }}
