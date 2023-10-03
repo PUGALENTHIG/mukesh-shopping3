@@ -28,6 +28,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name="description" content="Social Networking App" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Sarvesh Patil"></meta>
+        {process.env.NODE_ENV === "development" ? (
+          <link rel="icon" href="/devicon.ico" sizes="any" />
+        ) : (
+          <link rel="icon" href="/favicon.ico" sizes="any" />
+        )}
       </Head>
       <NextUIProvider>
         <ThemeProvider attribute="class" defaultTheme="dark">

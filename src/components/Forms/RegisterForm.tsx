@@ -74,7 +74,7 @@ const RegisterForm = () => {
             isLoading={loading}
             disabled={loading}
             type="submit"
-            className="w-full transform rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+            className="w-full transform rounded-lg bg-violet-500 px-6 py-3 text-sm font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-violet-400 focus:outline-none focus:ring focus:ring-violet-300 focus:ring-opacity-50"
           >
             Sign Up
           </Button>
@@ -82,7 +82,7 @@ const RegisterForm = () => {
           <div className="mt-6 text-center ">
             <a
               href="#"
-              className="text-sm text-blue-500 hover:underline dark:text-blue-400"
+              className="text-sm text-violet-500 hover:underline dark:text-violet-400"
             >
               Already have an account?
             </a>

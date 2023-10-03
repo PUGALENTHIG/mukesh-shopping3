@@ -255,7 +255,10 @@ async function getPosts({
   });
 
   for (const d of data) {
-    updateInvertedIndex(d.id, d.content);
+    if (!invertedIndex.hasOwnProperty(d.id)) {
+      invertedIndex[d.id] = [];
+      updateInvertedIndex(d.id, d.content);
+    }
   }
 
   let nextCursor: typeof cursor | undefined;
